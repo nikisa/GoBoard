@@ -5,20 +5,24 @@ using UnityEngine;
 [RequireComponent(typeof(PlayerMover))]
 [RequireComponent(typeof(PlayerInput))]
 
-public class PlayerManager : MonoBehaviour {
+public class PlayerManager : TurnManager {
 
     public PlayerMover playerMover;
     public PlayerInput playerInput;
 
+    Board m_board;
+    
+    protected override void Awake() {
+        base.Awake();
 
-    private void Awake() {
         playerMover = GetComponent<PlayerMover>();
         playerInput = GetComponent<PlayerInput>();
-        playerInput.InputEnabled = true;
+
+        m_board = Object.FindObjectOfType<Board>().GetComponent<Board>();
     }
 
     void Update () {
-        if (playerMover.isMoving) {
+        if (playerMover.isMoving  || m_gameManager.CurrentTurn != Turn.Player) {
             return;
         }
 
@@ -40,6 +44,25 @@ public class PlayerManager : MonoBehaviour {
                 playerMover.MoveForward();
             }
         }
+    }
+
+    void CaptureEnemies() {
+        if (m_board != null) {
+            List<EnemyManager> enemies = m_board.FindEnemiesAt(m_board.playerNode);
+
+            if (enemies.Count != 0) {
+                foreach (EnemyManager enemy in enemies) {
+                    if (enemy != null) {
+                        enemy.Die();
+                    }
+                }
+            }
+        }
+    }
+
+    public override void FinishTurn() {
+        CaptureEnemies();
+        base.FinishTurn();
     }
 }
 

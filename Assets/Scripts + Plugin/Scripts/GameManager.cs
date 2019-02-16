@@ -3,11 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
+using System.Linq;
+
+[System.Serializable]
+public enum Turn {
+    Player,
+    Enemy
+} 
 
 public class GameManager : MonoBehaviour {
 
     Board m_board;
     PlayerManager m_player;
+
+    List<EnemyManager> m_enemies;
+
+    Turn m_currentTurn = Turn.Player;
+    public Turn CurrentTurn { get { return m_currentTurn; } }
 
     bool m_hasLevelStarted = false;
     public bool HasLevelStarted { get { return m_hasLevelStarted; } set { m_hasLevelStarted = value; } }
@@ -28,10 +40,14 @@ public class GameManager : MonoBehaviour {
     public UnityEvent startLevelEvent;
     public UnityEvent playLevelEvent;
     public UnityEvent endLevelEvent;
+    public UnityEvent loseLevelEvent;
 
     private void Awake() {
         m_board = Object.FindObjectOfType<Board>().GetComponent<Board>();
         m_player = Object.FindObjectOfType<PlayerManager>().GetComponent<PlayerManager>();
+
+        EnemyManager[] enemies = GameObject.FindObjectsOfType<EnemyManager>() as EnemyManager[];
+        m_enemies = enemies.ToList();
         
     }
 
@@ -99,6 +115,25 @@ public class GameManager : MonoBehaviour {
         Debug.Log("U got what I call ... swag!");
     }
 
+    public void LoseLevel() {
+        StartCoroutine(LoseLevelRoutine());
+    }
+
+    IEnumerator LoseLevelRoutine() {
+        m_isGameOver = true;
+
+        if (loseLevelEvent != null) {
+            loseLevelEvent.Invoke();
+        }
+
+        yield return new WaitForSeconds(2f);
+
+        Debug.Log("Your swag has been turned off , m8");
+
+        RestartLevel();
+
+    }
+
     IEnumerator EndLevelRoutine() {
 
         Debug.Log("END LEVEL");
@@ -137,4 +172,55 @@ public class GameManager : MonoBehaviour {
         return false;
     }
 
+    void PlayPlayerTurn() {
+        m_currentTurn = Turn.Player;
+        m_player.IsTurnComplete = false;
+    }
+
+    void PlayEnemyTurn() {
+        m_currentTurn = Turn.Enemy;
+
+        foreach (EnemyManager enemy in m_enemies) { //play each enemy's turn
+            if (enemy != null && !enemy.isDead) {
+                enemy.IsTurnComplete = false;
+                enemy.PlayTurn();
+            }
+        }
+    }
+
+
+    bool IsEnemyTurnComplete() {
+        foreach(EnemyManager enemy in m_enemies) {
+            if (enemy.isDead) {
+                continue;
+            }
+            if (!enemy.IsTurnComplete) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    bool AreEnemiesAllDead() {
+        foreach (EnemyManager enemy in m_enemies) {
+            if (!enemy.isDead) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void UpdateTurn() {
+        if (m_currentTurn == Turn.Player && m_player != null) {
+            if (m_player.IsTurnComplete && !AreEnemiesAllDead()) {
+                PlayEnemyTurn();
+            }
+
+        }else if(m_currentTurn == Turn.Enemy){
+            if (IsEnemyTurnComplete()) {
+                PlayPlayerTurn();
+            }       
+        }
+    }
 }

@@ -32,6 +32,16 @@ public class Board : MonoBehaviour {
 
     PlayerMover m_player;
 
+    //---------------------------------------------------------------------
+    //public List<Transform> capturePositions;
+    //int m_currentCapturePosition = 0;
+
+    //public int CurrentCapturePosition { get { return m_currentCapturePosition; } set { m_currentCapturePosition = value; } }
+
+    //public float capturePositionIconSize = 0.4f;
+    //public Color capturePositionIconColor = Color.blue;
+    //---------------------------------------------------------------------
+
     void Awake() {
         m_player = Object.FindObjectOfType<PlayerMover>().GetComponent<PlayerMover>();
         GetNodeList();
@@ -58,6 +68,21 @@ public class Board : MonoBehaviour {
             return FindNodeAt(m_player.transform.position);
         }
         return null;
+    }
+
+
+    public List<EnemyManager> FindEnemiesAt(Node node) {
+        List<EnemyManager> foundEnemies = new List<EnemyManager>();
+        EnemyManager[] enemies = Object.FindObjectsOfType<EnemyManager>() as EnemyManager[];
+
+        foreach (EnemyManager enemy in enemies) {
+            EnemyMover mover = enemy.GetComponent<EnemyMover>();
+
+            if (mover.CurrentNode == node) {
+                foundEnemies.Add(enemy);
+            }
+        }
+        return foundEnemies;
     }
 
     public void UpdatePlayerNode() {

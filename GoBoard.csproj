@@ -282,12 +282,18 @@
     <Compile Include="Assets\PostProcessing\Utilities\CustomMotionTexture\ExampleWheelController.cs" />
     <Compile Include="Assets\Scripts + Plugin\Scripts\Board.cs" />
     <Compile Include="Assets\Scripts + Plugin\Scripts\EndScreen.cs" />
+    <Compile Include="Assets\Scripts + Plugin\Scripts\EnemyDeath.cs" />
+    <Compile Include="Assets\Scripts + Plugin\Scripts\EnemyManager.cs" />
+    <Compile Include="Assets\Scripts + Plugin\Scripts\EnemyMover.cs" />
+    <Compile Include="Assets\Scripts + Plugin\Scripts\EnemySensor.cs" />
     <Compile Include="Assets\Scripts + Plugin\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts + Plugin\Scripts\GraphicMover.cs" />
     <Compile Include="Assets\Scripts + Plugin\Scripts\iTween.cs" />
     <Compile Include="Assets\Scripts + Plugin\Scripts\Link.cs" />
+    <Compile Include="Assets\Scripts + Plugin\Scripts\Mover.cs" />
     <Compile Include="Assets\Scripts + Plugin\Scripts\Node.cs" />
     <Compile Include="Assets\Scripts + Plugin\Scripts\Obstacle.cs" />
+    <Compile Include="Assets\Scripts + Plugin\Scripts\PlayerCompass.cs" />
     <Compile Include="Assets\Scripts + Plugin\Scripts\PlayerInput.cs" />
     <Compile Include="Assets\Scripts + Plugin\Scripts\PlayerManager.cs" />
     <Compile Include="Assets\Scripts + Plugin\Scripts\PlayerMover.cs" />
@@ -296,6 +302,7 @@
     <Compile Include="Assets\Scripts + Plugin\Scripts\Sample\SampleInfo.cs" />
     <Compile Include="Assets\Scripts + Plugin\Scripts\ScreenFader.cs" />
     <Compile Include="Assets\Scripts + Plugin\Scripts\Spinner.cs" />
+    <Compile Include="Assets\Scripts + Plugin\Scripts\TurnManager.cs" />
     <Compile Include="Assets\Scripts + Plugin\Scripts\Utility.cs" />
   </ItemGroup>
   <ItemGroup>
