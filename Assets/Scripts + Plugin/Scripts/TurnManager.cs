@@ -16,10 +16,13 @@ public class TurnManager : MonoBehaviour {
 	
     public virtual void FinishTurn() {
         m_isTurnComplete = true;
-
+        
         //update the GameManager
         if (m_gameManager != null) {
             m_gameManager.UpdateTurn();
+            
+            
         }
     }
+    
 }

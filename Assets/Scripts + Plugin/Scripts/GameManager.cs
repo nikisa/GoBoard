@@ -46,6 +46,7 @@ public class GameManager : MonoBehaviour {
         m_board = Object.FindObjectOfType<Board>().GetComponent<Board>();
         m_player = Object.FindObjectOfType<PlayerManager>().GetComponent<PlayerManager>();
 
+
         EnemyManager[] enemies = GameObject.FindObjectsOfType<EnemyManager>() as EnemyManager[];
         m_enemies = enemies.ToList();
         
@@ -212,15 +213,54 @@ public class GameManager : MonoBehaviour {
     }
 
     public void UpdateTurn() {
+        
+
         if (m_currentTurn == Turn.Player && m_player != null) {
             if (m_player.IsTurnComplete && !AreEnemiesAllDead()) {
                 PlayEnemyTurn();
             }
-
-        }else if(m_currentTurn == Turn.Enemy){
+            
+        }
+        else if(m_currentTurn == Turn.Enemy){
             if (IsEnemyTurnComplete()) {
                 PlayPlayerTurn();
-            }       
+
+                crackNode();
+            }            
         }
     }
+
+    public void crackNode() {
+
+        //______ENEMY ON CRACKNODE___________________
+
+        List<EnemyManager> enemies;
+
+        foreach (var node in m_board.CrackableNodes) {
+            enemies = m_board.FindEnemiesAt(node);
+            foreach (EnemyManager enemy in enemies) {
+                node.UpdateCrackableState();
+                node.UpdateCrackableTexture();
+                //node.GetComponentInChildren<CrackableTexture>().UpdateCrackableTexture();
+
+                if (node.GetCrackableState() == 0) {
+                    enemy.Die();
+                }
+            }
+        }
+
+        //______ENEMY ON CRACKNODE___________________
+
+
+        if (m_board.playerNode.isCrackable) {
+            m_board.playerNode.UpdateCrackableState();
+            m_board.playerNode.UpdateCrackableTexture();
+            //m_board.playerNode.GetComponentInChildren<CrackableTexture>().UpdateCrackableTexture();
+        }
+
+        if (m_board.playerNode.GetCrackableState() == 0) {
+            loseLevelEvent.Invoke();
+        }
+    }
+
 }

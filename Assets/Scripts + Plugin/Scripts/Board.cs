@@ -13,9 +13,14 @@ public class Board : MonoBehaviour {
         new Vector2(-0f , -spacing)
     };
 
+    //public enum consequence{nothing , lose , enemyDies , fallenObject};
+
 
     List<Node> m_allNodes = new List<Node>();
     public List<Node> AllNodes { get { return m_allNodes; } }
+
+    List<Node> m_crackableNodes = new List<Node>();
+    public List<Node> CrackableNodes { get { return m_crackableNodes; } }
 
 
     Node m_playerNode;
@@ -45,6 +50,7 @@ public class Board : MonoBehaviour {
     void Awake() {
         m_player = Object.FindObjectOfType<PlayerMover>().GetComponent<PlayerMover>();
         GetNodeList();
+        m_crackableNodes = FindCrackableNodes();
 
         m_goalNode = FindGoalNode();
     }
@@ -53,7 +59,7 @@ public class Board : MonoBehaviour {
         Node[] nList = GameObject.FindObjectsOfType<Node>();
         m_allNodes = new List<Node>(nList);
     }
-
+    
     public Node FindNodeAt(Vector3 pos) {
         Vector2 boardCoord = Utility.Vector2Round(new Vector2(pos.x, pos.z));
         return m_allNodes.Find(n => n.Coordinate == boardCoord);
@@ -70,7 +76,17 @@ public class Board : MonoBehaviour {
         return null;
     }
 
+    public List<Node> FindCrackableNodes() {
+        foreach (var node in m_allNodes) {
+            if (node.isCrackable) {
+                CrackableNodes.Add(node);
+            }
+        }
+        return CrackableNodes;
+    }
 
+    
+    
     public List<EnemyManager> FindEnemiesAt(Node node) {
         List<EnemyManager> foundEnemies = new List<EnemyManager>();
         EnemyManager[] enemies = Object.FindObjectsOfType<EnemyManager>() as EnemyManager[];
@@ -107,5 +123,3 @@ public class Board : MonoBehaviour {
         }
     }
 }
-
-

@@ -31,9 +31,17 @@ public class Node : MonoBehaviour {
 
     public bool isLevelGoal = false;
 
+    public bool isCrackable = false;
+
+    public int crackableState = 2;
+
+    public Sprite[] currentTexture = new Sprite[3];
+
+
     private void Awake() {
         m_board = Object.FindObjectOfType<Board>();
         m_coordinate = new Vector2(transform.position.x, transform.position.z);
+        UpdateCrackableTexture();
     }
 
     // Use this for initialization
@@ -141,4 +149,20 @@ public class Node : MonoBehaviour {
         }
         return null;
     }
+
+
+    public int GetCrackableState() {
+        return crackableState;
+    }
+
+    public void UpdateCrackableState() {
+        this.crackableState--;
+    }
+
+    public void UpdateCrackableTexture() {
+        if (this.isCrackable) {
+            this.GetComponent<SpriteRenderer>().sprite = currentTexture[this.GetCrackableState()];
+        }
+    }
+
 }
