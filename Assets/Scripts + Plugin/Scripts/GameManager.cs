@@ -213,7 +213,7 @@ public class GameManager : MonoBehaviour {
     }
 
     public void UpdateTurn() {
-        
+        triggerNode();
 
         if (m_currentTurn == Turn.Player && m_player != null) {
             if (m_player.IsTurnComplete && !AreEnemiesAllDead()) {
@@ -263,4 +263,34 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    public void triggerNode() {
+        
+        if (m_board.playerNode.isATrigger) {
+            m_board.SetPreviousPlayerNode(m_board.playerNode);
+            m_board.playerNode.UpdateTriggerToTrue();
+        }
+        else if(m_board.GetPreviousPlayerNode() != null) {
+            m_board.UpdateTriggerToFalse();
+        }
+        
+        List<EnemyManager> enemies;
+
+        foreach (var node in m_board.TriggerNodes) {
+            enemies = m_board.FindEnemiesAt(node);
+            foreach (EnemyManager enemy in enemies) {
+    
+
+                
+                if(enemy.GetEnemySensor.FindEnemyNode().isATrigger) {
+                    enemy.GetEnemySensor.SetPreviousEnemyNode(enemy.GetEnemySensor.FindEnemyNode());
+                    enemy.GetEnemySensor.FindEnemyNode().UpdateTriggerToTrue();
+                    Debug.Log(enemy.GetEnemySensor.GetPreviousEnemyNode());
+                }
+                else if (enemy.GetEnemySensor.GetPreviousEnemyNode() != null) {
+                    enemy.GetEnemySensor.GetPreviousEnemyNode().triggerState = false;
+                    Debug.Log("yolo");
+                }
+            }
+        }
+    }
 }

@@ -8,7 +8,10 @@ using UnityEngine.Events;
 public class EnemyManager : TurnManager {
 
     EnemyMover m_enemyMover;
+
     EnemySensor m_enemySensor;
+    public EnemySensor GetEnemySensor { get { return m_enemySensor; } }
+
     EnemyDeath m_enemyDeath;
     Board m_board;
 
@@ -72,5 +75,4 @@ public class EnemyManager : TurnManager {
             deathEvent.Invoke();
         }
     }
-
 }

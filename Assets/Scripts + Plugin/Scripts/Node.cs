@@ -37,6 +37,10 @@ public class Node : MonoBehaviour {
 
     public Sprite[] currentTexture = new Sprite[3];
 
+    public bool isATrigger = false;
+
+    public bool triggerState = false;
+
 
     private void Awake() {
         m_board = Object.FindObjectOfType<Board>();
@@ -163,6 +167,14 @@ public class Node : MonoBehaviour {
         if (this.isCrackable) {
             this.GetComponent<SpriteRenderer>().sprite = currentTexture[this.GetCrackableState()];
         }
+    }
+
+    public bool UpdateTriggerToTrue() {
+        return triggerState = true;
+    }//UpdateTriggerToFalse --> in Board
+
+    public bool UpdateTriggerToFalse() {
+        return triggerState = false;
     }
 
 }

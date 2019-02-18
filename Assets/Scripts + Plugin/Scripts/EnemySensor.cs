@@ -8,6 +8,10 @@ public class EnemySensor : MonoBehaviour {
 
     Node m_nodeToSearch;
     Board m_board;
+    
+    Node m_previousEnemyNode;
+
+    public Node PreviousEnemyNode { get { return m_previousEnemyNode; } set { m_previousEnemyNode = FindEnemyNode(); } }
 
     bool m_foundPlayer = false;
     public bool FoundPlayer { get { return m_foundPlayer; } }
@@ -32,8 +36,21 @@ public class EnemySensor : MonoBehaviour {
             }
         }
     }
-	// Update is called once per frame
-	//void Update () {
-    //    UpdateSensor();
-	//}
+
+    public Node FindEnemyNode() {
+        return m_board.FindNodeAt(transform.position);
+    }
+
+
+    public void SetPreviousEnemyNode(Node n) {
+        PreviousEnemyNode = n;
+    }
+
+    public Node GetPreviousEnemyNode() {
+        return PreviousEnemyNode;
+    }
+
+    public void UpdateTriggerToFalse() {
+        PreviousEnemyNode.triggerState = false;
+    }
 }

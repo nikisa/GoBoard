@@ -1170,7 +1170,7 @@ Prefab:
     - target: {fileID: 114782162807892154, guid: 64842a6aac9ac3d42815036daf631562,
         type: 2}
       propertyPath: isCrackable
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114782162807892154, guid: 64842a6aac9ac3d42815036daf631562,
         type: 2}
@@ -1192,6 +1192,11 @@ Prefab:
         type: 3}
     - target: {fileID: 4860592632684288, guid: 64842a6aac9ac3d42815036daf631562, type: 2}
       propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114782162807892154, guid: 64842a6aac9ac3d42815036daf631562,
+        type: 2}
+      propertyPath: isATrigger
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -2059,6 +2064,11 @@ Prefab:
       value: 
       objectReference: {fileID: 21300000, guid: db16eb65b260db94bb3c4ae1539a9e7a,
         type: 3}
+    - target: {fileID: 114782162807892154, guid: 64842a6aac9ac3d42815036daf631562,
+        type: 2}
+      propertyPath: isATrigger
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 64842a6aac9ac3d42815036daf631562, type: 2}
   m_IsPrefabParent: 0
@@ -2757,26 +2767,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ed5a36a9b436de4590dbc1b8214c925, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  geometry: {fileID: 0}
-  linkPrefab: {fileID: 0}
-  scaleTime: 0.3
-  easeType: 15
-  delay: 1
-  obstacleLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  isLevelGoal: 0
-  isCrackable: 0
-  crackableState: 2
-  currentTexture:
-  - {fileID: 21300000, guid: f6ffbfc9a27cb844fabdc6c331027d62, type: 3}
-  - {fileID: 21300000, guid: e5f5b88821dd5f94f8fea71fcbb4b13d, type: 3}
-  - {fileID: 21300000, guid: db16eb65b260db94bb3c4ae1539a9e7a, type: 3}
-  Node: {fileID: 0}
-  currentTexture:
-  - {fileID: 21300000, guid: f6ffbfc9a27cb844fabdc6c331027d62, type: 3}
-  - {fileID: 21300000, guid: e5f5b88821dd5f94f8fea71fcbb4b13d, type: 3}
-  - {fileID: 21300000, guid: db16eb65b260db94bb3c4ae1539a9e7a, type: 3}
 --- !u!212 &1059861000
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3514,7 +3504,7 @@ Prefab:
     - target: {fileID: 114782162807892154, guid: 64842a6aac9ac3d42815036daf631562,
         type: 2}
       propertyPath: isCrackable
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114782162807892154, guid: 64842a6aac9ac3d42815036daf631562,
         type: 2}
@@ -3539,6 +3529,11 @@ Prefab:
       value: 
       objectReference: {fileID: 21300000, guid: db16eb65b260db94bb3c4ae1539a9e7a,
         type: 3}
+    - target: {fileID: 114782162807892154, guid: 64842a6aac9ac3d42815036daf631562,
+        type: 2}
+      propertyPath: isATrigger
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 64842a6aac9ac3d42815036daf631562, type: 2}
   m_IsPrefabParent: 0
@@ -5497,6 +5492,11 @@ Prefab:
       value: 
       objectReference: {fileID: 21300000, guid: db16eb65b260db94bb3c4ae1539a9e7a,
         type: 3}
+    - target: {fileID: 114782162807892154, guid: 64842a6aac9ac3d42815036daf631562,
+        type: 2}
+      propertyPath: isATrigger
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 64842a6aac9ac3d42815036daf631562, type: 2}
   m_IsPrefabParent: 0

@@ -22,6 +22,8 @@ public class Board : MonoBehaviour {
     List<Node> m_crackableNodes = new List<Node>();
     public List<Node> CrackableNodes { get { return m_crackableNodes; } }
 
+    List<Node> m_triggerNodes = new List<Node>();
+    public List<Node> TriggerNodes { get { return m_triggerNodes; } }
 
     Node m_playerNode;
 
@@ -29,6 +31,9 @@ public class Board : MonoBehaviour {
 
     Node m_goalNode;
     public Node GoalNode { get { return m_goalNode; } }
+
+    Node m_previousPlayerNode;
+    public Node PreviousPlayerNode { get { return m_previousPlayerNode; } set { m_previousPlayerNode = playerNode;} }
 
     public GameObject goalPrefab;
     public float drawGoalTime = 2f;
@@ -51,8 +56,8 @@ public class Board : MonoBehaviour {
         m_player = Object.FindObjectOfType<PlayerMover>().GetComponent<PlayerMover>();
         GetNodeList();
         m_crackableNodes = FindCrackableNodes();
-
         m_goalNode = FindGoalNode();
+        m_triggerNodes = FindTriggerNodes();
     }
 
     public void GetNodeList() {
@@ -85,8 +90,17 @@ public class Board : MonoBehaviour {
         return CrackableNodes;
     }
 
-    
-    
+    public List<Node> FindTriggerNodes() {
+        foreach (var node in m_allNodes) {
+            if (node.isATrigger) {
+                TriggerNodes.Add(node);
+            }
+        }
+        return TriggerNodes;
+    }
+
+
+
     public List<EnemyManager> FindEnemiesAt(Node node) {
         List<EnemyManager> foundEnemies = new List<EnemyManager>();
         EnemyManager[] enemies = Object.FindObjectsOfType<EnemyManager>() as EnemyManager[];
@@ -104,6 +118,20 @@ public class Board : MonoBehaviour {
     public void UpdatePlayerNode() {
         m_playerNode = FindPlayerNode();
     }
+
+
+    public void SetPreviousPlayerNode(Node n) {
+        PreviousPlayerNode = n; 
+    }
+
+    public Node GetPreviousPlayerNode() {
+        return PreviousPlayerNode;
+    }
+
+    public void UpdateTriggerToFalse() {
+        PreviousPlayerNode.triggerState = false;
+    }
+
 
     public void DrawGoal() {
         if (goalPrefab != null && m_goalNode != null) {
