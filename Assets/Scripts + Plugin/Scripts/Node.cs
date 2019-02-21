@@ -41,11 +41,24 @@ public class Node : MonoBehaviour {
 
     public bool triggerState = false;
 
+    public bool isASwitch = false;
+
+    public bool switchState = false;
+
+    public bool isAGate = false;
+
+    public bool gateOpen = false;
+
+    public int gateID = 0;
+
+    private Vector3 m_nodePosition;
+
 
     private void Awake() {
         m_board = Object.FindObjectOfType<Board>();
         m_coordinate = new Vector2(transform.position.x, transform.position.z);
         UpdateCrackableTexture();
+        m_nodePosition = new Vector3(1000f,1000f,1000f);
     }
 
     // Use this for initialization
@@ -177,4 +190,60 @@ public class Node : MonoBehaviour {
         return triggerState = false;
     }
 
+    public bool GetSwitchState() {
+        return switchState;
+    }
+
+    public bool UpdateSwitchToTrue() {
+        if (m_nodePosition != transform.position) {
+            Debug.Log("ao");
+            StaticCounter.switchCounter++;
+        }
+        UpdateGateToOpen();
+        return switchState = true;
+    }
+
+    public bool UpdateSwitchToFalse() {
+        UpdateGateToClose();
+        return switchState = false;
+    }
+
+    public bool GetGateState() {
+        return gateOpen;
+    }
+
+    public int GetGateID() {
+        return gateID;
+    }
+
+
+    public void SetGateOpen() {
+        gateOpen = true;
+    }
+
+    public void SetGateClose() {
+        gateOpen = false;
+    }
+
+    public bool UpdateGateToOpen() {
+        gateOpen = false;
+
+        foreach (var node in m_board.AllNodes) {
+            if (node.GetGateID() ==  StaticCounter.switchCounter) {
+                node.SetGateOpen();
+            }
+        }
+        return gateOpen;
+    }
+
+    public bool UpdateGateToClose() {
+        gateOpen = true;
+
+        foreach (var node in m_board.AllNodes) {
+            if (node.GetGateID() == StaticCounter.switchCounter) {
+                node.SetGateClose();
+            }
+        }
+        return gateOpen;
+    }
 }

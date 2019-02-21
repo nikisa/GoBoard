@@ -47,7 +47,10 @@ public class Mover : MonoBehaviour {
             Node targetNode = m_board.FindNodeAt(destinationPos);
 
             if (targetNode != null && m_currentNode != null && m_currentNode.LinkedNodes.Contains(targetNode)) {
+                if ((targetNode.isAGate && targetNode.GetGateState() == true) || !targetNode.isAGate) {
                     StartCoroutine(MoveRoutine(destinationPos, delayTime));
+                }
+
             }
             else {
                   Debug.Log("CURRENT NODE NOT CONNECTED");
@@ -109,6 +112,7 @@ public class Mover : MonoBehaviour {
         Vector3 newPosition = transform.position + new Vector3(0, 0, -Board.spacing);
         Move(newPosition, 0);
     }
+
 
     protected void UpdateCurrentNode() {
         m_currentNode = m_board.FindNodeAt(transform.position);

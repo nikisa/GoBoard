@@ -28,6 +28,18 @@ public class PlayerManager : TurnManager {
 
         playerInput.GetKeyInput();
 
+        if (m_board.playerNode.isASwitch && playerInput.S) {
+            Debug.Log("S");
+            bool switchState = m_board.playerNode.GetSwitchState();
+            if (switchState) {
+                m_board.playerNode.UpdateSwitchToFalse();
+            }
+            else{
+                m_board.playerNode.UpdateSwitchToTrue();
+            }
+        }
+            
+
         if (playerInput.V == 0) {
             if (playerInput.H < 0) {
                 playerMover.MoveLeft();
