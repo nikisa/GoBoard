@@ -51,15 +51,14 @@ public class Mover : MonoBehaviour {
                     StartCoroutine(MoveRoutine(destinationPos, delayTime));
                 }
 
-            }
-            else {
-                  Debug.Log("CURRENT NODE NOT CONNECTED");
+            } else {
+                Debug.Log("CURRENT NODE NOT CONNECTED");
             }
         }
     }
 
     protected virtual IEnumerator MoveRoutine(Vector3 destinationPos, float delayTime) {
-        
+
         isMoving = true;
         destination = destinationPos;
 
@@ -90,7 +89,7 @@ public class Mover : MonoBehaviour {
 
         UpdateCurrentNode();
 
-        
+
     }
 
     public void MoveLeft() {
@@ -127,7 +126,7 @@ public class Mover : MonoBehaviour {
             "y", newY,
             "delay", 0f,
             "easetype", easeType,
-            "time",rotateTime
+            "time", rotateTime
             ));
     }
 }

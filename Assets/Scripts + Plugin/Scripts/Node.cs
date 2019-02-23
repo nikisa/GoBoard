@@ -8,7 +8,7 @@ public class Node : MonoBehaviour {
     public Vector2 Coordinate { get { return Utility.Vector2Round(m_coordinate); } }
 
     List<Node> m_neighborNodes = new List<Node>();
-    public List<Node> NeighborNodes {  get { return m_neighborNodes; } }
+    public List<Node> NeighborNodes { get { return m_neighborNodes; } }
 
     List<Node> m_linkedNodes = new List<Node>();
     public List<Node> LinkedNodes { get { return m_linkedNodes; } }
@@ -18,7 +18,7 @@ public class Node : MonoBehaviour {
     public GameObject geometry;
 
     public GameObject linkPrefab;
-    
+
     public float scaleTime = 0.3f;
     public iTween.EaseType easeType = iTween.EaseType.easeInExpo;
 
@@ -53,32 +53,35 @@ public class Node : MonoBehaviour {
 
     private Vector3 m_nodePosition;
 
+    public Sprite[] sprites;
+
+
 
     private void Awake() {
         m_board = Object.FindObjectOfType<Board>();
         m_coordinate = new Vector2(transform.position.x, transform.position.z);
         UpdateCrackableTexture();
-        m_nodePosition = new Vector3(1000f,1000f,1000f);
+        m_nodePosition = new Vector3(1000f, 1000f, 1000f); 
     }
 
     // Use this for initialization
-    void Start () {
+    void Start() {
         if (geometry != null) {
             geometry.transform.localScale = Vector3.zero;
-            
+
             if (m_board != null) {
                 m_neighborNodes = FindNeighbors(m_board.AllNodes);
             }
         }
-	}
-	
+    }
+
     public void ShowGeometry() {
         if (geometry != null) {
             iTween.ScaleTo(geometry, iTween.Hash(
-                "time",scaleTime,
+                "time", scaleTime,
                 "scale", Vector3.one,
                 "easetype", easeType,
-                "delay" , delay
+                "delay", delay
             ));
         }
     }
@@ -97,7 +100,7 @@ public class Node : MonoBehaviour {
         return n_List;
     }
 
-    public Node FindNeighborAt(List<Node> nodes , Vector2 dir) {
+    public Node FindNeighborAt(List<Node> nodes, Vector2 dir) {
         return nodes.Find(n => n.Coordinate == Coordinate + dir);
     }
 
@@ -112,7 +115,7 @@ public class Node : MonoBehaviour {
             InitNeighbors();
             m_isInitialized = true;
         }
-    
+
     }
 
     void InitNeighbors() {
@@ -122,7 +125,7 @@ public class Node : MonoBehaviour {
     IEnumerator InitNeighborsRoutine() {
         yield return new WaitForSeconds(delay);
 
-        foreach(Node n in m_neighborNodes) {
+        foreach (Node n in m_neighborNodes) {
 
             if (!m_linkedNodes.Contains(n)) {
 
@@ -142,7 +145,7 @@ public class Node : MonoBehaviour {
             linkInstance.transform.parent = transform;
 
             Link link = linkInstance.GetComponent<Link>();
-            if(link != null) {
+            if (link != null) {
                 link.DrawLink(transform.position, targetNode.transform.position);
             }
 
@@ -152,7 +155,7 @@ public class Node : MonoBehaviour {
 
             if (!targetNode.LinkedNodes.Contains(this)) {
                 targetNode.LinkedNodes.Add(this);
-            }           
+            }
         }
     }
 
@@ -160,7 +163,7 @@ public class Node : MonoBehaviour {
         Vector3 checkDirection = targetNode.transform.position - transform.position;
         RaycastHit raycastHit;
 
-        if (Physics.Raycast(transform.position, checkDirection , out raycastHit , Board.spacing + 0.1f , obstacleLayer)) {
+        if (Physics.Raycast(transform.position, checkDirection, out raycastHit, Board.spacing + 0.1f, obstacleLayer)) {
             //Debug.Log("Node FindObstacle: Ha colpito un ostacolo da " + this.name + " a " + targetNode.name);
             return raycastHit.collider.GetComponent<Obstacle>();
         }
@@ -178,11 +181,19 @@ public class Node : MonoBehaviour {
 
     public void UpdateCrackableTexture() {
         if (this.isCrackable) {
-            this.GetComponent<SpriteRenderer>().sprite = currentTexture[this.GetCrackableState()];
+            transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = sprites[crackableState];
+        } else {
+            transform.GetChild(1).gameObject.SetActive(false);
         }
     }
 
     public bool UpdateTriggerToTrue() {
+
+        if (m_nodePosition != transform.position) {
+            StaticCounter.triggerCounter++;
+        }
+        UpdateGateToOpen();
+
         return triggerState = true;
     }//UpdateTriggerToFalse --> in Board
 
@@ -196,7 +207,6 @@ public class Node : MonoBehaviour {
 
     public bool UpdateSwitchToTrue() {
         if (m_nodePosition != transform.position) {
-            Debug.Log("ao");
             StaticCounter.switchCounter++;
         }
         UpdateGateToOpen();
@@ -229,7 +239,7 @@ public class Node : MonoBehaviour {
         gateOpen = false;
 
         foreach (var node in m_board.AllNodes) {
-            if (node.GetGateID() ==  StaticCounter.switchCounter) {
+            if (node.GetGateID() == StaticCounter.switchCounter || node.GetGateID() == StaticCounter.triggerCounter) {
                 node.SetGateOpen();
             }
         }
@@ -240,10 +250,15 @@ public class Node : MonoBehaviour {
         gateOpen = true;
 
         foreach (var node in m_board.AllNodes) {
-            if (node.GetGateID() == StaticCounter.switchCounter) {
+            if (node.GetGateID() == StaticCounter.switchCounter || node.GetGateID() == StaticCounter.triggerCounter) {
                 node.SetGateClose();
             }
         }
         return gateOpen;
     }
+
+    public void SetTextureToCrackable() {
+        
+    }
+
 }

@@ -11,7 +11,7 @@ public class PlayerManager : TurnManager {
     public PlayerInput playerInput;
 
     Board m_board;
-    
+
     protected override void Awake() {
         base.Awake();
 
@@ -21,8 +21,8 @@ public class PlayerManager : TurnManager {
         m_board = Object.FindObjectOfType<Board>().GetComponent<Board>();
     }
 
-    void Update () {
-        if (playerMover.isMoving  || m_gameManager.CurrentTurn != Turn.Player) {
+    void Update() {
+        if (playerMover.isMoving || m_gameManager.CurrentTurn != Turn.Player) {
             return;
         }
 
@@ -33,26 +33,22 @@ public class PlayerManager : TurnManager {
             bool switchState = m_board.playerNode.GetSwitchState();
             if (switchState) {
                 m_board.playerNode.UpdateSwitchToFalse();
-            }
-            else{
+            } else {
                 m_board.playerNode.UpdateSwitchToTrue();
             }
         }
-            
+
 
         if (playerInput.V == 0) {
             if (playerInput.H < 0) {
                 playerMover.MoveLeft();
-            }
-            else if (playerInput.H > 0) {
+            } else if (playerInput.H > 0) {
                 playerMover.MoveRight();
             }
-        }
-        else if (playerInput.H == 0) {
+        } else if (playerInput.H == 0) {
             if (playerInput.V < 0) {
                 playerMover.MoveBackward();
-            }
-            else if (playerInput.V > 0) {
+            } else if (playerInput.V > 0) {
                 playerMover.MoveForward();
             }
         }
@@ -77,4 +73,3 @@ public class PlayerManager : TurnManager {
         base.FinishTurn();
     }
 }
-

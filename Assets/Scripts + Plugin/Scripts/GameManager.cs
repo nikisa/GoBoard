@@ -34,7 +34,8 @@ public class GameManager : MonoBehaviour {
     public bool HasLevelFinished { get { return m_hasLevelFinished; } set { m_hasLevelFinished = value; } }
 
     public float delay = 1f;
-    
+
+
     public UnityEvent setupEvent;
     public UnityEvent startLevelEvent;
     public UnityEvent playLevelEvent;
@@ -213,18 +214,19 @@ public class GameManager : MonoBehaviour {
 
     public void UpdateTurn() {
         triggerNode();
-        
 
         if (m_currentTurn == Turn.Player && m_player != null) {
             if (m_player.IsTurnComplete && !AreEnemiesAllDead()) {
                 PlayEnemyTurn();
-            } 
+            }
+            
         }
         else if(m_currentTurn == Turn.Enemy){
             if (IsEnemyTurnComplete()) {
                 PlayPlayerTurn();
 
                 crackNode();
+                
             }            
         }
     }
@@ -283,14 +285,13 @@ public class GameManager : MonoBehaviour {
                 if(enemy.GetEnemySensor.FindEnemyNode().isATrigger) {
                     enemy.GetEnemySensor.SetPreviousEnemyNode(enemy.GetEnemySensor.FindEnemyNode());
                     enemy.GetEnemySensor.FindEnemyNode().UpdateTriggerToTrue();
-                    //Debug.Log(enemy.GetEnemySensor.GetPreviousEnemyNode());
+                    Debug.Log(enemy.GetEnemySensor.GetPreviousEnemyNode());
                 }
                 else if (enemy.GetEnemySensor.GetPreviousEnemyNode() != null) {
                     enemy.GetEnemySensor.GetPreviousEnemyNode().triggerState = false;
-                    
+                    Debug.Log("yolo");
                 }
             }
         }
     }
-    
 }

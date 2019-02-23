@@ -34,8 +34,7 @@ public class PlayerInput : MonoBehaviour {
             m_h = Input.GetAxisRaw("Horizontal");
             m_v = Input.GetAxisRaw("Vertical");
             m_s = Input.GetKeyDown(KeyCode.Return);
-        }
-        else {
+        } else {
             m_h = 0f;
             m_v = 0f;
             m_s = false;
