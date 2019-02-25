@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class Board : MonoBehaviour {
 
@@ -25,6 +26,10 @@ public class Board : MonoBehaviour {
     List<Node> m_triggerNodes = new List<Node>();
     public List<Node> TriggerNodes { get { return m_triggerNodes; } }
 
+    List<MovableObject> m_AllmovableObjects = new List<MovableObject>();
+    public List<MovableObject> AllMovableObjects { get { return m_AllmovableObjects; }}
+    
+
     Node m_playerNode;
 
     public Node playerNode { get { return m_playerNode; } }
@@ -35,6 +40,7 @@ public class Board : MonoBehaviour {
     Node m_previousPlayerNode;
     public Node PreviousPlayerNode { get { return m_previousPlayerNode; } set { m_previousPlayerNode = playerNode;} }
 
+    
     public GameObject goalPrefab;
     public float drawGoalTime = 2f;
     public float drawGoalDelay = 2f;
@@ -54,6 +60,9 @@ public class Board : MonoBehaviour {
 
     void Awake() {
         m_player = Object.FindObjectOfType<PlayerMover>().GetComponent<PlayerMover>();
+
+        m_AllmovableObjects = FindMovableObjects();
+        
         GetNodeList();
         m_crackableNodes = FindCrackableNodes();
         m_goalNode = FindGoalNode();
@@ -132,6 +141,17 @@ public class Board : MonoBehaviour {
         PreviousPlayerNode.triggerState = false;
     }
 
+    
+    public List<MovableObject> FindMovableObjects() {
+        List<MovableObject> foundMovableObjects = new List<MovableObject>();
+        MovableObject[] movableObjects = Object.FindObjectsOfType<MovableObject>() as MovableObject[];
+        foundMovableObjects = movableObjects.ToList();
+
+        return foundMovableObjects;
+    }
+
+
+    
 
     public void DrawGoal() {
         if (goalPrefab != null && m_goalNode != null) {

@@ -11,18 +11,21 @@ public class PlayerManager : TurnManager {
     public PlayerInput playerInput;
 
     Board m_board;
+    GameManager m_gm;
     
     protected override void Awake() {
         base.Awake();
-
+        
         playerMover = GetComponent<PlayerMover>();
         playerInput = GetComponent<PlayerInput>();
 
         m_board = Object.FindObjectOfType<Board>().GetComponent<Board>();
+        m_gm = Object.FindObjectOfType<GameManager>().GetComponent<GameManager>();
+        
     }
 
-    void Update () {
-        if (playerMover.isMoving  || m_gameManager.CurrentTurn != Turn.Player) {
+    void Update() {
+        if (playerMover.isMoving || m_gameManager.CurrentTurn != Turn.Player) {
             return;
         }
 
@@ -34,26 +37,39 @@ public class PlayerManager : TurnManager {
             if (switchState) {
                 m_board.playerNode.UpdateSwitchToFalse();
             }
-            else{
+            else {
                 m_board.playerNode.UpdateSwitchToTrue();
             }
         }
-            
+
 
         if (playerInput.V == 0) {
             if (playerInput.H < 0) {
                 playerMover.MoveLeft();
+                foreach (var movableObject in m_gm.GetMovableObjectsNodes()) {
+                    movableObject.PushLeft();
+                }
             }
             else if (playerInput.H > 0) {
                 playerMover.MoveRight();
+                foreach (var movableObject in m_gm.GetMovableObjectsNodes()) {
+                    movableObject.PushRight();
+                }
             }
         }
         else if (playerInput.H == 0) {
             if (playerInput.V < 0) {
                 playerMover.MoveBackward();
+                foreach (var movableObject in m_gm.GetMovableObjectsNodes()) {
+                    movableObject.PushBackward();
+                }
+
             }
             else if (playerInput.V > 0) {
                 playerMover.MoveForward();
+                foreach (var movableObject in m_gm.GetMovableObjectsNodes()) {
+                    movableObject.PushForward();
+                }
             }
         }
     }
@@ -61,7 +77,6 @@ public class PlayerManager : TurnManager {
     void CaptureEnemies() {
         if (m_board != null) {
             List<EnemyManager> enemies = m_board.FindEnemiesAt(m_board.playerNode);
-
             if (enemies.Count != 0) {
                 foreach (EnemyManager enemy in enemies) {
                     if (enemy != null) {
@@ -76,5 +91,6 @@ public class PlayerManager : TurnManager {
         CaptureEnemies();
         base.FinishTurn();
     }
-}
 
+    
+}

@@ -290,6 +290,7 @@
     <Compile Include="Assets\Scripts + Plugin\Scripts\GraphicMover.cs" />
     <Compile Include="Assets\Scripts + Plugin\Scripts\iTween.cs" />
     <Compile Include="Assets\Scripts + Plugin\Scripts\Link.cs" />
+    <Compile Include="Assets\Scripts + Plugin\Scripts\MovableObject.cs" />
     <Compile Include="Assets\Scripts + Plugin\Scripts\Mover.cs" />
     <Compile Include="Assets\Scripts + Plugin\Scripts\Node.cs" />
     <Compile Include="Assets\Scripts + Plugin\Scripts\Obstacle.cs" />

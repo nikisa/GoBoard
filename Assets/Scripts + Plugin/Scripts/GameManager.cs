@@ -9,7 +9,7 @@ using System.Linq;
 public enum Turn {
     Player,
     Enemy
-} 
+}
 
 public class GameManager : MonoBehaviour {
 
@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour {
     PlayerManager m_player;
 
     List<EnemyManager> m_enemies;
+    List<MovableObject> m_movableObjects;
 
     Turn m_currentTurn = Turn.Player;
     public Turn CurrentTurn { get { return m_currentTurn; } }
@@ -34,7 +35,8 @@ public class GameManager : MonoBehaviour {
     public bool HasLevelFinished { get { return m_hasLevelFinished; } set { m_hasLevelFinished = value; } }
 
     public float delay = 1f;
-    
+
+
     public UnityEvent setupEvent;
     public UnityEvent startLevelEvent;
     public UnityEvent playLevelEvent;
@@ -48,17 +50,20 @@ public class GameManager : MonoBehaviour {
 
         EnemyManager[] enemies = GameObject.FindObjectsOfType<EnemyManager>() as EnemyManager[];
         m_enemies = enemies.ToList();
-        
+
+        MovableObject[] movableObjects = GameObject.FindObjectsOfType<MovableObject>() as MovableObject[];
+        m_movableObjects = movableObjects.ToList();
+
     }
 
-    void Start () {
+    void Start() {
         if (m_player != null && m_board != null) {
             StartCoroutine("RunGameLoop");
         }
         else {
             Debug.LogWarning("GameManager ERROR: no player or board found");
         }
-	}
+    }
 
     IEnumerator RunGameLoop() {
         yield return StartCoroutine("StartLevelRoutine");
@@ -69,7 +74,7 @@ public class GameManager : MonoBehaviour {
     IEnumerator StartLevelRoutine() {
 
         Debug.Log("SETUP LEVEL");
-        if(setupEvent != null) {
+        if (setupEvent != null) {
             setupEvent.Invoke();
         }
 
@@ -87,7 +92,7 @@ public class GameManager : MonoBehaviour {
         if (startLevelEvent != null) {
             startLevelEvent.Invoke();
         }
-        
+
     }
 
     IEnumerator PlayLevelRoutine() {
@@ -109,7 +114,7 @@ public class GameManager : MonoBehaviour {
 
             m_isGameOver = IsWinner();
 
-            
+
         }
 
         Debug.Log("U got what I call ... swag!");
@@ -140,7 +145,7 @@ public class GameManager : MonoBehaviour {
 
         m_player.playerInput.InputEnabled = false;
 
-        if (endLevelEvent!=null) {
+        if (endLevelEvent != null) {
             endLevelEvent.Invoke();
         }
 
@@ -166,7 +171,7 @@ public class GameManager : MonoBehaviour {
     }
 
     bool IsWinner() {
-        if(m_board.playerNode != null) {
+        if (m_board.playerNode != null) {
             return (m_board.playerNode == m_board.GoalNode);
         }
         return false;
@@ -190,7 +195,7 @@ public class GameManager : MonoBehaviour {
 
 
     bool IsEnemyTurnComplete() {
-        foreach(EnemyManager enemy in m_enemies) {
+        foreach (EnemyManager enemy in m_enemies) {
             if (enemy.isDead) {
                 continue;
             }
@@ -212,20 +217,23 @@ public class GameManager : MonoBehaviour {
     }
 
     public void UpdateTurn() {
-        triggerNode();
         
+        triggerNode();
 
         if (m_currentTurn == Turn.Player && m_player != null) {
             if (m_player.IsTurnComplete && !AreEnemiesAllDead()) {
                 PlayEnemyTurn();
-            } 
+                m_movableObjects = GetMovableObjectsNodes();
+            }
+
         }
-        else if(m_currentTurn == Turn.Enemy){
+        else if (m_currentTurn == Turn.Enemy) {
             if (IsEnemyTurnComplete()) {
                 PlayPlayerTurn();
 
                 crackNode();
-            }            
+
+            }
         }
     }
 
@@ -254,7 +262,6 @@ public class GameManager : MonoBehaviour {
         if (m_board.playerNode.isCrackable) {
             m_board.playerNode.UpdateCrackableState();
             m_board.playerNode.UpdateCrackableTexture();
-            //m_board.playerNode.GetComponentInChildren<CrackableTexture>().UpdateCrackableTexture();
         }
 
         if (m_board.playerNode.GetCrackableState() == 0) {
@@ -263,34 +270,52 @@ public class GameManager : MonoBehaviour {
     }
 
     public void triggerNode() {
-        
+
         if (m_board.playerNode.isATrigger) {
             m_board.SetPreviousPlayerNode(m_board.playerNode);
             m_board.playerNode.UpdateTriggerToTrue();
         }
-        else if(m_board.GetPreviousPlayerNode() != null) {
+        else if (m_board.GetPreviousPlayerNode() != null) {
             m_board.UpdateTriggerToFalse();
         }
-        
+
         List<EnemyManager> enemies;
 
         foreach (var node in m_board.TriggerNodes) {
             enemies = m_board.FindEnemiesAt(node);
             foreach (EnemyManager enemy in enemies) {
-    
 
-                
-                if(enemy.GetEnemySensor.FindEnemyNode().isATrigger) {
+
+
+                if (enemy.GetEnemySensor.FindEnemyNode().isATrigger) {
                     enemy.GetEnemySensor.SetPreviousEnemyNode(enemy.GetEnemySensor.FindEnemyNode());
                     enemy.GetEnemySensor.FindEnemyNode().UpdateTriggerToTrue();
-                    //Debug.Log(enemy.GetEnemySensor.GetPreviousEnemyNode());
+                    Debug.Log(enemy.GetEnemySensor.GetPreviousEnemyNode());
                 }
                 else if (enemy.GetEnemySensor.GetPreviousEnemyNode() != null) {
                     enemy.GetEnemySensor.GetPreviousEnemyNode().triggerState = false;
-                    
+                    Debug.Log("yolo");
                 }
             }
         }
     }
+
+
+    public List<MovableObject> GetMovableObjectsNodes() {
+        Debug.Log("A");
+        foreach (var movObj in m_board.AllMovableObjects) {
+            Debug.Log(movObj);
+            foreach (var node in m_board.playerNode.LinkedNodes) {
+                Debug.Log(node);
+                if (movObj.transform.position == node.transform.position) {
+                    Debug.Log("ESKEREEE");
+                    m_movableObjects.Add(movObj);
+                    
+                }
+            }
+        }
+        return m_movableObjects;
+    }
     
+
 }
