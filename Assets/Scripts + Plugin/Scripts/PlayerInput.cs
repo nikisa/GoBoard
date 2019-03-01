@@ -38,15 +38,11 @@ public class PlayerInput : MonoBehaviour {
             m_h = Input.GetAxisRaw("Horizontal");
             m_v = Input.GetAxisRaw("Vertical");
             m_s = Input.GetKeyDown(KeyCode.Return);
-<<<<<<< HEAD
             m_p = Input.GetKey(KeyCode.LeftShift);
 
 
         }
         else {
-=======
-        } else {
->>>>>>> 6c91b03535c4b98922e07880ceacdf772f1b60e2
             m_h = 0f;
             m_v = 0f;
             m_s = false;

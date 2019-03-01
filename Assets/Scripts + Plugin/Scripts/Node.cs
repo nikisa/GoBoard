@@ -62,11 +62,7 @@ public class Node : MonoBehaviour {
         m_board = Object.FindObjectOfType<Board>();
         m_coordinate = new Vector2(transform.position.x, transform.position.z);
         UpdateCrackableTexture();
-<<<<<<< HEAD
         m_nodePosition = new Vector3(1000f, 1000f, 1000f);
-=======
-        m_nodePosition = new Vector3(1000f, 1000f, 1000f); 
->>>>>>> 6c91b03535c4b98922e07880ceacdf772f1b60e2
     }
 
     // Use this for initialization
@@ -187,12 +183,8 @@ public class Node : MonoBehaviour {
     public void UpdateCrackableTexture() {
         if (this.isCrackable) {
             transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = sprites[crackableState];
-<<<<<<< HEAD
         }
         else {
-=======
-        } else {
->>>>>>> 6c91b03535c4b98922e07880ceacdf772f1b60e2
             transform.GetChild(1).gameObject.SetActive(false);
         }
     }
@@ -266,12 +258,4 @@ public class Node : MonoBehaviour {
         }
         return gateOpen;
     }
-<<<<<<< HEAD
-=======
-
-    public void SetTextureToCrackable() {
-        
-    }
-
->>>>>>> 6c91b03535c4b98922e07880ceacdf772f1b60e2
 }

@@ -224,23 +224,15 @@ public class GameManager : MonoBehaviour {
     public void UpdateTurn() {
 
         triggerNode();
-<<<<<<< HEAD
         checkNodeForObstacles();
         
-=======
->>>>>>> 6c91b03535c4b98922e07880ceacdf772f1b60e2
 
 
         if (m_currentTurn == Turn.Player && m_player != null) {
             if (m_player.IsTurnComplete && !AreEnemiesAllDead()) {
                 PlayEnemyTurn();
-<<<<<<< HEAD
                 m_movableObjects = GetMovableObjects();
             }
-=======
-            }
-            
->>>>>>> 6c91b03535c4b98922e07880ceacdf772f1b60e2
         }
         
         else if (m_currentTurn == Turn.Enemy) {
@@ -248,13 +240,8 @@ public class GameManager : MonoBehaviour {
                 PlayPlayerTurn();
 
                 crackNode();
-<<<<<<< HEAD
 
             }
-=======
-                
-            }            
->>>>>>> 6c91b03535c4b98922e07880ceacdf772f1b60e2
         }
     }
 
@@ -317,7 +304,6 @@ public class GameManager : MonoBehaviour {
                 else if (enemy.GetEnemySensor.GetPreviousEnemyNode() != null) {
                     enemy.GetEnemySensor.GetPreviousEnemyNode().triggerState = false;
                     Debug.Log("yolo");
-<<<<<<< HEAD
                 }
             }
 
@@ -329,13 +315,10 @@ public class GameManager : MonoBehaviour {
                 }
                 else if (movableObject.GetPreviousMovableObjectNode() != null) {
                     movableObject.GetPreviousMovableObjectNode().triggerState = false;
-=======
->>>>>>> 6c91b03535c4b98922e07880ceacdf772f1b60e2
                 }
             }
         }
     }
-<<<<<<< HEAD
     
 
 
@@ -362,6 +345,3 @@ public class GameManager : MonoBehaviour {
         }
     }
 }
-=======
-}
->>>>>>> 6c91b03535c4b98922e07880ceacdf772f1b60e2
