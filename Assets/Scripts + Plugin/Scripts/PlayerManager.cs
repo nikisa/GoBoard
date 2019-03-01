@@ -45,30 +45,87 @@ public class PlayerManager : TurnManager {
 
         if (playerInput.V == 0) {
             if (playerInput.H < 0) {
-                playerMover.MoveLeft();
-                foreach (var movableObject in m_gm.GetMovableObjectsNodes()) {
-                    movableObject.PushLeft();
+                if (playerInput.P && m_board.FindMovableObjectsAt(m_board.FindNodeAt(m_board.playerNode.transform.position + new Vector3(-2f, 0, 0))).Count == 0) { //Aggiunto AND per evtiare di entrare nei MO facendo la pull verso di essi
+                    playerMover.MoveLeft();
+                    foreach (var movableObject in m_gm.GetMovableObjects()) {
+                        movableObject.PullLeft();
+                    }
                 }
+                else {
+                    if (m_board.FindMovableObjectsAt(m_board.FindNodeAt(m_board.playerNode.transform.position + new Vector3(-2f,0,0))).Count != 0 && !m_board.FindMovableObjectsAt(m_board.FindNodeAt(m_board.playerNode.transform.position + new Vector3(-2f, 0, 0)))[0].leftBlocked) { //Se alla nostra Sx c'è un M.O e non è bloccato
+                        
+                        foreach (var movableObject in m_gm.GetMovableObjects()) {
+                            movableObject.PushLeft();
+                        }
+                        playerMover.MoveLeft();
+
+                    }
+                    else if(m_board.FindMovableObjectsAt(m_board.FindNodeAt(m_board.playerNode.transform.position + new Vector3(-2f, 0, 0))).Count == 0) { //Se non c'è nulla muovi solo il pg
+                        playerMover.MoveLeft();
+                    }
+                }
+                //END LEFT
             }
             else if (playerInput.H > 0) {
-                playerMover.MoveRight();
-                foreach (var movableObject in m_gm.GetMovableObjectsNodes()) {
-                    movableObject.PushRight();
+                if (playerInput.P && m_board.FindMovableObjectsAt(m_board.FindNodeAt(m_board.playerNode.transform.position + new Vector3(2f, 0, 0))).Count == 0) {
+                    playerMover.MoveRight();
+                    foreach (var movableObject in m_gm.GetMovableObjects()) {
+                        movableObject.PullRight();
+                    }
                 }
+                else {
+                    if (m_board.FindMovableObjectsAt(m_board.FindNodeAt(m_board.playerNode.transform.position + new Vector3(2f, 0, 0))).Count != 0 && !m_board.FindMovableObjectsAt(m_board.FindNodeAt(m_board.playerNode.transform.position + new Vector3(2f, 0, 0)))[0].rightBlocked) { //Se alla nostra Dx c'è un M.O e non è bloccato
+                        playerMover.MoveRight();
+                        foreach (var movableObject in m_gm.GetMovableObjects()) {
+                            movableObject.PushRight();
+                        }
+                    }
+                    else if (m_board.FindMovableObjectsAt(m_board.FindNodeAt(m_board.playerNode.transform.position + new Vector3(2f, 0, 0))).Count == 0) { //Se non c'è nulla muovi solo il pg
+                        playerMover.MoveRight();
+                    }
+                }
+                
             }
+
         }
         else if (playerInput.H == 0) {
             if (playerInput.V < 0) {
-                playerMover.MoveBackward();
-                foreach (var movableObject in m_gm.GetMovableObjectsNodes()) {
-                    movableObject.PushBackward();
+                if (playerInput.P && m_board.FindMovableObjectsAt(m_board.FindNodeAt(m_board.playerNode.transform.position + new Vector3(0, 0, -2f))).Count == 0) {
+                    playerMover.MoveBackward();
+                    foreach (var movableObject in m_gm.GetMovableObjects()) {
+                        movableObject.PullBackward();
+                    }
                 }
-
+                else {
+                    if (m_board.FindMovableObjectsAt(m_board.FindNodeAt(m_board.playerNode.transform.position + new Vector3(0, 0, -2f))).Count != 0 && !m_board.FindMovableObjectsAt(m_board.FindNodeAt(m_board.playerNode.transform.position + new Vector3(0, 0, -2f)))[0].downBlocked) { //Se sotto non c'è un M.O e non è bloccato
+                        playerMover.MoveBackward();
+                        foreach (var movableObject in m_gm.GetMovableObjects()) {
+                            movableObject.PushBackward();
+                        }
+                    }
+                    else if (m_board.FindMovableObjectsAt(m_board.FindNodeAt(m_board.playerNode.transform.position + new Vector3(0, 0, -2f))).Count == 0) { //Se non c'è nulla muovi solo il pg
+                        playerMover.MoveBackward();
+                    }
+                }
             }
+
             else if (playerInput.V > 0) {
-                playerMover.MoveForward();
-                foreach (var movableObject in m_gm.GetMovableObjectsNodes()) {
-                    movableObject.PushForward();
+                if (playerInput.P && m_board.FindMovableObjectsAt(m_board.FindNodeAt(m_board.playerNode.transform.position + new Vector3(0, 0, 2f))).Count == 0) {
+                    playerMover.MoveForward();
+                    foreach (var movableObject in m_gm.GetMovableObjects()) {
+                        movableObject.PullForward();
+                    }
+                }
+                else {
+                    if (m_board.FindMovableObjectsAt(m_board.FindNodeAt(m_board.playerNode.transform.position + new Vector3(0, 0, 2f))).Count != 0 && !m_board.FindMovableObjectsAt(m_board.FindNodeAt(m_board.playerNode.transform.position + new Vector3(0, 0, 2f)))[0].upBlocked) { //Se sopra non c'è un M.O e non è bloccato
+                        playerMover.MoveForward();
+                        foreach (var movableObject in m_gm.GetMovableObjects()) {
+                            movableObject.PushForward();
+                        }
+                    }
+                    else if (m_board.FindMovableObjectsAt(m_board.FindNodeAt(m_board.playerNode.transform.position + new Vector3(0, 0, 2f))).Count == 0) { //Se non c'è nulla muovi solo il pg
+                        playerMover.MoveForward();
+                    }
                 }
             }
         }

@@ -124,6 +124,19 @@ public class Board : MonoBehaviour {
         return foundEnemies;
     }
 
+
+    public List<MovableObject> FindMovableObjectsAt(Node node) {
+        List<MovableObject> foundMovableObjects = new List<MovableObject>();
+        MovableObject[] movableObjects = Object.FindObjectsOfType<MovableObject>() as MovableObject[];
+
+        foreach (MovableObject movableObject in movableObjects) {
+            if (movableObject.CurrentNode == node) {
+                foundMovableObjects.Add(movableObject);
+            }
+        }
+        return foundMovableObjects;
+    }
+
     public void UpdatePlayerNode() {
         m_playerNode = FindPlayerNode();
     }

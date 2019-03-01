@@ -16,6 +16,11 @@ public class GameManager : MonoBehaviour {
     Board m_board;
     PlayerManager m_player;
 
+    EnemySensor m_enemySensor;
+    EnemyMover m_enemyMover;
+
+
+
     List<EnemyManager> m_enemies;
     List<MovableObject> m_movableObjects;
 
@@ -217,16 +222,19 @@ public class GameManager : MonoBehaviour {
     }
 
     public void UpdateTurn() {
-        
+
         triggerNode();
+        checkNodeForObstacles();
+        
+
 
         if (m_currentTurn == Turn.Player && m_player != null) {
             if (m_player.IsTurnComplete && !AreEnemiesAllDead()) {
                 PlayEnemyTurn();
-                m_movableObjects = GetMovableObjectsNodes();
+                m_movableObjects = GetMovableObjects();
             }
-
         }
+        
         else if (m_currentTurn == Turn.Enemy) {
             if (IsEnemyTurnComplete()) {
                 PlayPlayerTurn();
@@ -280,6 +288,7 @@ public class GameManager : MonoBehaviour {
         }
 
         List<EnemyManager> enemies;
+        List<MovableObject> movableObjects;
 
         foreach (var node in m_board.TriggerNodes) {
             enemies = m_board.FindEnemiesAt(node);
@@ -297,11 +306,23 @@ public class GameManager : MonoBehaviour {
                     Debug.Log("yolo");
                 }
             }
+
+            movableObjects = m_board.FindMovableObjectsAt(node);
+            foreach (MovableObject movableObject in movableObjects) {
+                if (movableObject.FindMovableObjectNode().isATrigger) {
+                    movableObject.SetPreviousMovableObjectNode(movableObject.FindMovableObjectNode());
+                    movableObject.FindMovableObjectNode().UpdateTriggerToTrue();
+                }
+                else if (movableObject.GetPreviousMovableObjectNode() != null) {
+                    movableObject.GetPreviousMovableObjectNode().triggerState = false;
+                }
+            }
         }
     }
+    
 
 
-    public List<MovableObject> GetMovableObjectsNodes() {
+    public List<MovableObject> GetMovableObjects() {
         Debug.Log("A");
         foreach (var movObj in m_board.AllMovableObjects) {
             Debug.Log(movObj);
@@ -316,6 +337,11 @@ public class GameManager : MonoBehaviour {
         }
         return m_movableObjects;
     }
-    
 
+
+    public void checkNodeForObstacles() {
+        foreach (var movableObject in m_movableObjects) {
+            movableObject.checkNodeForObstacle();
+        }
+    }
 }

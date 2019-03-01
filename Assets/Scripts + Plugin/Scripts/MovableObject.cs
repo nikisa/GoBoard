@@ -6,22 +6,51 @@ public class MovableObject : Mover {
 
     public PlayerManager playerManager;
 
+    public bool upBlocked = false;
+    public bool downBlocked = false;
+    public bool leftBlocked = false;
+    public bool rightBlocked = false;
+
+
+    private Node m_previousMovableObjectNode;
+    public Node PreviousMovableObjectNode { get { return m_previousMovableObjectNode; } set { m_previousMovableObjectNode = FindMovableObjectNode(); } }
+
+
+    public Node FindMovableObjectNode() {
+        return m_board.FindNodeAt(transform.position);
+    }
+
+    public void UpdateTriggerToFalse() {
+        PreviousMovableObjectNode.triggerState = false;
+    }
+
+    public void SetPreviousMovableObjectNode(Node n) {
+        PreviousMovableObjectNode = n;
+    }
+
+    public Node GetPreviousMovableObjectNode() {
+        return PreviousMovableObjectNode;
+    }
+
+    
+
 
     public void PushRight() {
         Node movableObjectNode = m_board.FindNodeAt(transform.position);
 
-        if (m_board.playerNode.transform.position.z == movableObjectNode.transform.position.z && Vector3.Distance(movableObjectNode.transform.position , m_board.playerNode.transform.position)<3f && m_board.playerNode.transform.position.x < movableObjectNode.transform.position.x) {
+        if (m_board.playerNode.transform.position.z == movableObjectNode.transform.position.z && Vector3.Distance(movableObjectNode.transform.position, m_board.playerNode.transform.position) < 3f && m_board.playerNode.transform.position.x < movableObjectNode.transform.position.x) {
             Debug.Log("MoveRight");
             this.MoveRight();
-        }    
+        }
     }
 
     public void PushLeft() {
         Node movableObjectNode = m_board.FindNodeAt(transform.position);
 
-        if (m_board.playerNode.transform.position.z == movableObjectNode.transform.position.z && Vector3.Distance(movableObjectNode.transform.position, m_board.playerNode.transform.position) < 3f && m_board.playerNode.transform.position.x > movableObjectNode.transform.position.x) {
+        if (m_board.playerNode.transform.position.z == movableObjectNode.transform.position.z && Vector3.Distance(movableObjectNode.transform.position, m_board.playerNode.transform.position) <= 2f && m_board.playerNode.transform.position.x > movableObjectNode.transform.position.x) {
             Debug.Log("MoveRight");
             this.MoveLeft();
+
         }
     }
 
@@ -43,8 +72,74 @@ public class MovableObject : Mover {
         }
     }
 
+    //PUSH___________________________________________
 
-    public void Pull() {
+    public void PullLeft() {
+        Node movableObjectNode = m_board.FindNodeAt(transform.position);
 
+        if (m_board.playerNode.transform.position.z == movableObjectNode.transform.position.z && Vector3.Distance(movableObjectNode.transform.position, m_board.playerNode.transform.position) < 3f && m_board.playerNode.transform.position.x < movableObjectNode.transform.position.x) {
+            Debug.Log("MoveRight");
+            this.MoveLeft();
+        }
+    }
+
+    public void PullRight() {
+        Node movableObjectNode = m_board.FindNodeAt(transform.position);
+
+        if (m_board.playerNode.transform.position.z == movableObjectNode.transform.position.z && Vector3.Distance(movableObjectNode.transform.position, m_board.playerNode.transform.position) < 3f && m_board.playerNode.transform.position.x > movableObjectNode.transform.position.x) {
+            Debug.Log("MoveRight");
+            this.MoveRight();
+        }
+    }
+
+    public void PullBackward() {
+        Node movableObjectNode = m_board.FindNodeAt(transform.position);
+
+        if (m_board.playerNode.transform.position.x == movableObjectNode.transform.position.x && Vector3.Distance(movableObjectNode.transform.position, m_board.playerNode.transform.position) < 3f && m_board.playerNode.transform.position.z < movableObjectNode.transform.position.z) {
+            Debug.Log("MoveRight");
+            this.MoveBackward();
+        }
+    }
+
+    public void PullForward() {
+        Node movableObjectNode = m_board.FindNodeAt(transform.position);
+
+        if (m_board.playerNode.transform.position.x == movableObjectNode.transform.position.x && Vector3.Distance(movableObjectNode.transform.position, m_board.playerNode.transform.position) < 3f && m_board.playerNode.transform.position.z > movableObjectNode.transform.position.z) {
+            Debug.Log("MoveRight");
+            this.MoveForward();
+        }
+    }
+
+
+    //PULL___________________________________________
+
+
+    public void checkNodeForObstacle() { //Restituisce 2 se la via è libera , altrimenti 1
+
+        leftBlocked = false;
+        rightBlocked = false;
+        downBlocked = false;
+        upBlocked = false;
+
+        Node nextMovableObjectNodeLeft = m_board.FindNodeAt(transform.position + new Vector3(-2f, 0, 0));
+        Node nextMovableObjectNodeRight = m_board.FindNodeAt(transform.position + new Vector3(2f, 0, 0));
+        Node nextMovableObjectNodeUp = m_board.FindNodeAt(transform.position + new Vector3(0, 0, 2f));
+        Node nextMovableObjectNodeDown = m_board.FindNodeAt(transform.position + new Vector3(0, 0, -2f));
+
+        if ((nextMovableObjectNodeLeft == null || m_board.FindMovableObjectsAt(nextMovableObjectNodeLeft).Count != 0 || m_board.FindEnemiesAt(nextMovableObjectNodeLeft).Count != 0 || !m_board.FindNodeAt(this.transform.position).LinkedNodes.Contains(nextMovableObjectNodeLeft) || (nextMovableObjectNodeLeft.isAGate && nextMovableObjectNodeLeft.GetGateState() == false)) && m_board.playerNode.transform.position == transform.position + new Vector3(2f,0,0)) {
+            leftBlocked = true;
+        }
+
+        if ((nextMovableObjectNodeRight == null || m_board.FindMovableObjectsAt(nextMovableObjectNodeRight).Count != 0 || m_board.FindEnemiesAt(nextMovableObjectNodeRight).Count != 0 || !m_board.FindNodeAt(this.transform.position).LinkedNodes.Contains(nextMovableObjectNodeRight) ||(nextMovableObjectNodeRight.isAGate && nextMovableObjectNodeRight.GetGateState() == false)) && m_board.playerNode.transform.position == transform.position + new Vector3(-2f, 0, 0)) {
+            rightBlocked = true;
+        }
+
+        if ((nextMovableObjectNodeUp == null || m_board.FindMovableObjectsAt(nextMovableObjectNodeUp).Count != 0 || m_board.FindEnemiesAt(nextMovableObjectNodeUp).Count != 0 || !m_board.FindNodeAt(this.transform.position).LinkedNodes.Contains(nextMovableObjectNodeUp) || (nextMovableObjectNodeUp.isAGate && nextMovableObjectNodeUp.GetGateState() == false)) && m_board.playerNode.transform.position == transform.position + new Vector3(0, 0, -2f)) {
+            upBlocked = true;
+        }
+
+        if ((nextMovableObjectNodeDown == null || m_board.FindMovableObjectsAt(nextMovableObjectNodeDown).Count != 0 || m_board.FindEnemiesAt(nextMovableObjectNodeDown).Count != 0 || !m_board.FindNodeAt(this.transform.position).LinkedNodes.Contains(nextMovableObjectNodeDown) || (nextMovableObjectNodeDown.isAGate && nextMovableObjectNodeDown.GetGateState() == false)) && m_board.playerNode.transform.position == transform.position + new Vector3(0, 0, 2f)) {
+            downBlocked = true;
+        }
     }
 }

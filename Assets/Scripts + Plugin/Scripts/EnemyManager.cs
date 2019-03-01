@@ -5,6 +5,7 @@ using UnityEngine.Events;
 
 [RequireComponent(typeof(EnemyMover))]
 [RequireComponent(typeof(EnemySensor))]
+
 public class EnemyManager : TurnManager {
 
     EnemyMover m_enemyMover;
@@ -14,6 +15,7 @@ public class EnemyManager : TurnManager {
 
     EnemyDeath m_enemyDeath;
     Board m_board;
+
 
     
 
@@ -33,10 +35,12 @@ public class EnemyManager : TurnManager {
     }
 
     public void PlayTurn() {
+        
         if (m_isDead) {
             FinishTurn();
             return;
         }
+        
         StartCoroutine(PlayTurnRoutine());
     }
 
@@ -52,16 +56,13 @@ public class EnemyManager : TurnManager {
                 //attack player
                 //notify the GM to lose the level
                 m_gameManager.LoseLevel();
-
-
             }
             else {
                 // movement
                 m_enemyMover.MoveOneTurn(); // --> finishMovementEvent.Invoke()
+                
             }
-            
-        }
-        
+        }        
     }
 
     public void Die() {

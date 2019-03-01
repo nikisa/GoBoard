@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerMover : Mover {
 
+    float playerMovementDelay = 0.26f;
+
     PlayerCompass m_playerCompass;
 
     protected override void Awake() {
@@ -30,7 +32,7 @@ public class PlayerMover : Mover {
         }
 
         //run the parent class MoveRoutine
-        yield return StartCoroutine(base.MoveRoutine(destinationPos, delayTime));
+        yield return StartCoroutine(base.MoveRoutine(destinationPos, playerMovementDelay));
 
         UpdateBoard();
 

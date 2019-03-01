@@ -10,7 +10,7 @@ public enum MovementType {
 }
 
 public class EnemyMover : Mover {
-
+    
     public Vector3 directionToMove = new Vector3(0f , 0f , Board.spacing);
 
     public MovementType movementType = MovementType.Stationary;
@@ -65,7 +65,7 @@ public class EnemyMover : Mover {
             Node newDestNode = m_board.FindNodeAt(newDest);
             Node nextDestNode = m_board.FindNodeAt(nextDest);
 
-            if (nextDestNode == null || nextDestNode.LinkedNodes.Contains(nextDestNode)) {
+            if (nextDestNode == null || nextDestNode.LinkedNodes.Contains(nextDestNode) || m_board.FindMovableObjectsAt(nextDestNode).Count != 0) {
                 destination = startPos;
                 FaceDestination();
 
