@@ -51,8 +51,12 @@ public class Mover : MonoBehaviour {
                     StartCoroutine(MoveRoutine(destinationPos, delayTime));
                 }
 
+<<<<<<< HEAD
             }
             else {
+=======
+            } else {
+>>>>>>> 6c91b03535c4b98922e07880ceacdf772f1b60e2
                 Debug.Log("CURRENT NODE NOT CONNECTED");
             }
         }

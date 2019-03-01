@@ -11,8 +11,12 @@ public class PlayerManager : TurnManager {
     public PlayerInput playerInput;
 
     Board m_board;
+<<<<<<< HEAD
     GameManager m_gm;
     
+=======
+
+>>>>>>> 6c91b03535c4b98922e07880ceacdf772f1b60e2
     protected override void Awake() {
         base.Awake();
         
@@ -36,8 +40,12 @@ public class PlayerManager : TurnManager {
             bool switchState = m_board.playerNode.GetSwitchState();
             if (switchState) {
                 m_board.playerNode.UpdateSwitchToFalse();
+<<<<<<< HEAD
             }
             else {
+=======
+            } else {
+>>>>>>> 6c91b03535c4b98922e07880ceacdf772f1b60e2
                 m_board.playerNode.UpdateSwitchToTrue();
             }
         }
@@ -45,6 +53,7 @@ public class PlayerManager : TurnManager {
 
         if (playerInput.V == 0) {
             if (playerInput.H < 0) {
+<<<<<<< HEAD
                 if (playerInput.P && m_board.FindMovableObjectsAt(m_board.FindNodeAt(m_board.playerNode.transform.position + new Vector3(-2f, 0, 0))).Count == 0) { //Aggiunto AND per evtiare di entrare nei MO facendo la pull verso di essi
                     playerMover.MoveLeft();
                     foreach (var movableObject in m_gm.GetMovableObjects()) {
@@ -127,6 +136,17 @@ public class PlayerManager : TurnManager {
                         playerMover.MoveForward();
                     }
                 }
+=======
+                playerMover.MoveLeft();
+            } else if (playerInput.H > 0) {
+                playerMover.MoveRight();
+            }
+        } else if (playerInput.H == 0) {
+            if (playerInput.V < 0) {
+                playerMover.MoveBackward();
+            } else if (playerInput.V > 0) {
+                playerMover.MoveForward();
+>>>>>>> 6c91b03535c4b98922e07880ceacdf772f1b60e2
             }
         }
     }
@@ -148,6 +168,9 @@ public class PlayerManager : TurnManager {
         CaptureEnemies();
         base.FinishTurn();
     }
+<<<<<<< HEAD
 
     
+=======
+>>>>>>> 6c91b03535c4b98922e07880ceacdf772f1b60e2
 }
