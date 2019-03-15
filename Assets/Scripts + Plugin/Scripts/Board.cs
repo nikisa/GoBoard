@@ -18,7 +18,7 @@ public class Board : MonoBehaviour {
 
 
     List<Node> m_allNodes = new List<Node>();
-    public List<Node> AllNodes { get { return m_allNodes; } }
+    public List<Node> AllNodes { get { return m_allNodes; } set { GetNodeList(); } }
 
     List<Node> m_crackableNodes = new List<Node>();
     public List<Node> CrackableNodes { get { return m_crackableNodes; } }
@@ -183,4 +183,5 @@ public class Board : MonoBehaviour {
             m_playerNode.InitNode();
         }
     }
+    
 }

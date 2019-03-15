@@ -180,6 +180,11 @@ public class Node : MonoBehaviour {
         this.crackableState--;
     }
 
+    public void FromCrackableToNormal() {
+        this.crackableState = 100;
+    }
+
+
     public void UpdateCrackableTexture() {
         if (this.isCrackable) {
             transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = sprites[crackableState];
@@ -258,4 +263,13 @@ public class Node : MonoBehaviour {
         }
         return gateOpen;
     }
+
+    public ItemData GetData() {
+        ItemData itemData = new ItemData() {
+            BoardPosition = transform.position,
+            ItemType = ItemData.Type.Node,
+        };
+        return itemData;
+    }
+
 }

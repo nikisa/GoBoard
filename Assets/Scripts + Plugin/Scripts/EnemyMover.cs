@@ -13,14 +13,18 @@ public class EnemyMover : Mover {
     
     public Vector3 directionToMove = new Vector3(0f , 0f , Board.spacing);
 
+    public MovementType firstMovementType = MovementType.Stationary;
     public MovementType movementType = MovementType.Stationary;
+
 
     public float standTime = 1f;
 
 	protected override void Awake() {
         base.Awake();
         faceDestination = true;
-	}
+        movementType = firstMovementType;
+
+    }
 
     protected override void Start(){
         base.Start();
@@ -84,7 +88,7 @@ public class EnemyMover : Mover {
         base.finishMovementEvent.Invoke();
     }
 
-    void Spin() {
+    public void Spin() {
         StartCoroutine(SpinRoutine());
     }
     IEnumerator SpinRoutine() {

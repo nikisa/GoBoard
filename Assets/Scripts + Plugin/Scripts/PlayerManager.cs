@@ -31,104 +31,105 @@ public class PlayerManager : TurnManager {
 
         playerInput.GetKeyInput();
 
-        if (m_board.playerNode.isASwitch && playerInput.S) {
-            Debug.Log("S");
-            bool switchState = m_board.playerNode.GetSwitchState();
-            if (switchState) {
-                m_board.playerNode.UpdateSwitchToFalse();
-            }
-            else {
-                m_board.playerNode.UpdateSwitchToTrue();
-            }
-        }
-
-
-        if (playerInput.V == 0) {
-            if (playerInput.H < 0) {
-                if (playerInput.P && m_board.FindMovableObjectsAt(m_board.FindNodeAt(m_board.playerNode.transform.position + new Vector3(-2f, 0, 0))).Count == 0) { //Aggiunto AND per evtiare di entrare nei MO facendo la pull verso di essi
-                    playerMover.MoveLeft();
-                    foreach (var movableObject in m_gm.GetMovableObjects()) {
-                        movableObject.PullLeft();
-                    }
+        if (m_board.playerNode != null) {
+            if (m_board.playerNode.isASwitch && playerInput.S) {
+                Debug.Log("S");
+                bool switchState = m_board.playerNode.GetSwitchState();
+                if (switchState) {
+                    m_board.playerNode.UpdateSwitchToFalse();
                 }
                 else {
-                    if (m_board.FindMovableObjectsAt(m_board.FindNodeAt(m_board.playerNode.transform.position + new Vector3(-2f,0,0))).Count != 0 && !m_board.FindMovableObjectsAt(m_board.FindNodeAt(m_board.playerNode.transform.position + new Vector3(-2f, 0, 0)))[0].leftBlocked) { //Se alla nostra Sx c'è un M.O e non è bloccato
-                        
+                    m_board.playerNode.UpdateSwitchToTrue();
+                }
+            }
+
+            if (playerInput.V == 0) {
+                if (playerInput.H < 0) {
+                    if (playerInput.P && m_board.FindMovableObjectsAt(m_board.FindNodeAt(m_board.playerNode.transform.position + new Vector3(-2f, 0, 0))).Count == 0) { //Aggiunto AND per evtiare di entrare nei MO facendo la pull verso di essi
+                        playerMover.MoveLeft();
                         foreach (var movableObject in m_gm.GetMovableObjects()) {
-                            movableObject.PushLeft();
+                            movableObject.PullLeft();
                         }
-                        playerMover.MoveLeft();
+                    }
+                    else {
+                        if (m_board.FindMovableObjectsAt(m_board.FindNodeAt(m_board.playerNode.transform.position + new Vector3(-2f, 0, 0))).Count != 0 && !m_board.FindMovableObjectsAt(m_board.FindNodeAt(m_board.playerNode.transform.position + new Vector3(-2f, 0, 0)))[0].leftBlocked) { //Se alla nostra Sx c'è un M.O e non è bloccato
 
+                            foreach (var movableObject in m_gm.GetMovableObjects()) {
+                                movableObject.PushLeft();
+                            }
+                            playerMover.MoveLeft();
+
+                        }
+                        else if (m_board.FindMovableObjectsAt(m_board.FindNodeAt(m_board.playerNode.transform.position + new Vector3(-2f, 0, 0))).Count == 0) { //Se non c'è nulla muovi solo il pg
+                            playerMover.MoveLeft();
+                        }
                     }
-                    else if(m_board.FindMovableObjectsAt(m_board.FindNodeAt(m_board.playerNode.transform.position + new Vector3(-2f, 0, 0))).Count == 0) { //Se non c'è nulla muovi solo il pg
-                        playerMover.MoveLeft();
-                    }
+                    //END LEFT
                 }
-                //END LEFT
-            }
-            else if (playerInput.H > 0) {
-                if (playerInput.P && m_board.FindMovableObjectsAt(m_board.FindNodeAt(m_board.playerNode.transform.position + new Vector3(2f, 0, 0))).Count == 0) {
-                    playerMover.MoveRight();
-                    foreach (var movableObject in m_gm.GetMovableObjects()) {
-                        movableObject.PullRight();
-                    }
-                }
-                else {
-                    if (m_board.FindMovableObjectsAt(m_board.FindNodeAt(m_board.playerNode.transform.position + new Vector3(2f, 0, 0))).Count != 0 && !m_board.FindMovableObjectsAt(m_board.FindNodeAt(m_board.playerNode.transform.position + new Vector3(2f, 0, 0)))[0].rightBlocked) { //Se alla nostra Dx c'è un M.O e non è bloccato
+                else if (playerInput.H > 0) {
+                    if (playerInput.P && m_board.FindMovableObjectsAt(m_board.FindNodeAt(m_board.playerNode.transform.position + new Vector3(2f, 0, 0))).Count == 0) {
                         playerMover.MoveRight();
                         foreach (var movableObject in m_gm.GetMovableObjects()) {
-                            movableObject.PushRight();
+                            movableObject.PullRight();
                         }
                     }
-                    else if (m_board.FindMovableObjectsAt(m_board.FindNodeAt(m_board.playerNode.transform.position + new Vector3(2f, 0, 0))).Count == 0) { //Se non c'è nulla muovi solo il pg
-                        playerMover.MoveRight();
+                    else {
+                        if (m_board.FindMovableObjectsAt(m_board.FindNodeAt(m_board.playerNode.transform.position + new Vector3(2f, 0, 0))).Count != 0 && !m_board.FindMovableObjectsAt(m_board.FindNodeAt(m_board.playerNode.transform.position + new Vector3(2f, 0, 0)))[0].rightBlocked) { //Se alla nostra Dx c'è un M.O e non è bloccato
+                            playerMover.MoveRight();
+                            foreach (var movableObject in m_gm.GetMovableObjects()) {
+                                movableObject.PushRight();
+                            }
+                        }
+                        else if (m_board.FindMovableObjectsAt(m_board.FindNodeAt(m_board.playerNode.transform.position + new Vector3(2f, 0, 0))).Count == 0) { //Se non c'è nulla muovi solo il pg
+                            playerMover.MoveRight();
+                        }
                     }
-                }
-                
-            }
 
-        }
-        else if (playerInput.H == 0) {
-            if (playerInput.V < 0) {
-                if (playerInput.P && m_board.FindMovableObjectsAt(m_board.FindNodeAt(m_board.playerNode.transform.position + new Vector3(0, 0, -2f))).Count == 0) {
-                    playerMover.MoveBackward();
-                    foreach (var movableObject in m_gm.GetMovableObjects()) {
-                        movableObject.PullBackward();
-                    }
                 }
-                else {
-                    if (m_board.FindMovableObjectsAt(m_board.FindNodeAt(m_board.playerNode.transform.position + new Vector3(0, 0, -2f))).Count != 0 && !m_board.FindMovableObjectsAt(m_board.FindNodeAt(m_board.playerNode.transform.position + new Vector3(0, 0, -2f)))[0].downBlocked) { //Se sotto non c'è un M.O e non è bloccato
+
+            }
+            else if (playerInput.H == 0) {
+                if (playerInput.V < 0) {
+                    if (playerInput.P && m_board.FindMovableObjectsAt(m_board.FindNodeAt(m_board.playerNode.transform.position + new Vector3(0, 0, -2f))).Count == 0) {
                         playerMover.MoveBackward();
                         foreach (var movableObject in m_gm.GetMovableObjects()) {
-                            movableObject.PushBackward();
+                            movableObject.PullBackward();
                         }
                     }
-                    else if (m_board.FindMovableObjectsAt(m_board.FindNodeAt(m_board.playerNode.transform.position + new Vector3(0, 0, -2f))).Count == 0) { //Se non c'è nulla muovi solo il pg
-                        playerMover.MoveBackward();
+                    else {
+                        if (m_board.FindMovableObjectsAt(m_board.FindNodeAt(m_board.playerNode.transform.position + new Vector3(0, 0, -2f))).Count != 0 && !m_board.FindMovableObjectsAt(m_board.FindNodeAt(m_board.playerNode.transform.position + new Vector3(0, 0, -2f)))[0].downBlocked) { //Se sotto non c'è un M.O e non è bloccato
+                            playerMover.MoveBackward();
+                            foreach (var movableObject in m_gm.GetMovableObjects()) {
+                                movableObject.PushBackward();
+                            }
+                        }
+                        else if (m_board.FindMovableObjectsAt(m_board.FindNodeAt(m_board.playerNode.transform.position + new Vector3(0, 0, -2f))).Count == 0) { //Se non c'è nulla muovi solo il pg
+                            playerMover.MoveBackward();
+                        }
                     }
                 }
-            }
 
-            else if (playerInput.V > 0) {
-                if (playerInput.P && m_board.FindMovableObjectsAt(m_board.FindNodeAt(m_board.playerNode.transform.position + new Vector3(0, 0, 2f))).Count == 0) {
-                    playerMover.MoveForward();
-                    foreach (var movableObject in m_gm.GetMovableObjects()) {
-                        movableObject.PullForward();
-                    }
-                }
-                else {
-                    if (m_board.FindMovableObjectsAt(m_board.FindNodeAt(m_board.playerNode.transform.position + new Vector3(0, 0, 2f))).Count != 0 && !m_board.FindMovableObjectsAt(m_board.FindNodeAt(m_board.playerNode.transform.position + new Vector3(0, 0, 2f)))[0].upBlocked) { //Se sopra non c'è un M.O e non è bloccato
+                else if (playerInput.V > 0) {
+                    if (playerInput.P && m_board.FindMovableObjectsAt(m_board.FindNodeAt(m_board.playerNode.transform.position + new Vector3(0, 0, 2f))).Count == 0) {
                         playerMover.MoveForward();
                         foreach (var movableObject in m_gm.GetMovableObjects()) {
-                            movableObject.PushForward();
+                            movableObject.PullForward();
                         }
                     }
-                    else if (m_board.FindMovableObjectsAt(m_board.FindNodeAt(m_board.playerNode.transform.position + new Vector3(0, 0, 2f))).Count == 0) { //Se non c'è nulla muovi solo il pg
-                        playerMover.MoveForward();
+                    else {
+                        if (m_board.FindMovableObjectsAt(m_board.FindNodeAt(m_board.playerNode.transform.position + new Vector3(0, 0, 2f))).Count != 0 && !m_board.FindMovableObjectsAt(m_board.FindNodeAt(m_board.playerNode.transform.position + new Vector3(0, 0, 2f)))[0].upBlocked) { //Se sopra non c'è un M.O e non è bloccato
+                            playerMover.MoveForward();
+                            foreach (var movableObject in m_gm.GetMovableObjects()) {
+                                movableObject.PushForward();
+                            }
+                        }
+                        else if (m_board.FindMovableObjectsAt(m_board.FindNodeAt(m_board.playerNode.transform.position + new Vector3(0, 0, 2f))).Count == 0) { //Se non c'è nulla muovi solo il pg
+                            playerMover.MoveForward();
+                        }
                     }
                 }
             }
-        }
+        }   
     }
 
     void CaptureEnemies() {
@@ -149,5 +150,11 @@ public class PlayerManager : TurnManager {
         base.FinishTurn();
     }
 
-    
+    public ItemData GetData() {
+        ItemData itemData = new ItemData() {
+            BoardPosition = transform.position,
+            ItemType = ItemData.Type.Player,
+        };
+        return itemData;
+    }
 }

@@ -137,6 +137,7 @@ MonoBehaviour:
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   directionToMove: {x: 0, y: 0, z: 2}
+  firstMovementType: 1
   movementType: 1
   standTime: 1
 --- !u!114 &114764141370774938

@@ -16,12 +16,12 @@ public class GameManager : MonoBehaviour {
     Board m_board;
     PlayerManager m_player;
 
-    EnemySensor m_enemySensor;
     EnemyMover m_enemyMover;
 
 
 
     List<EnemyManager> m_enemies;
+    List<EnemyMover> m_enemiesMovers;
     List<MovableObject> m_movableObjects;
 
     Turn m_currentTurn = Turn.Player;
@@ -56,6 +56,9 @@ public class GameManager : MonoBehaviour {
         EnemyManager[] enemies = GameObject.FindObjectsOfType<EnemyManager>() as EnemyManager[];
         m_enemies = enemies.ToList();
 
+        EnemyMover[] enemiesMovers = GameObject.FindObjectsOfType<EnemyMover>() as EnemyMover[];
+        m_enemiesMovers = enemiesMovers.ToList();
+
         MovableObject[] movableObjects = GameObject.FindObjectsOfType<MovableObject>() as MovableObject[];
         m_movableObjects = movableObjects.ToList();
 
@@ -88,9 +91,7 @@ public class GameManager : MonoBehaviour {
         m_player.playerInput.InputEnabled = false;
         while (!m_hasLevelStarted) {
 
-            //todo: start screen
-            //todo: when a button is pressed , start
-            //todo: HasLevelStarted = true
+            
             yield return null;
         }
 
@@ -103,6 +104,11 @@ public class GameManager : MonoBehaviour {
     IEnumerator PlayLevelRoutine() {
 
         Debug.Log("PLAY LEVEL");
+
+        //foreach (Node node in m_board.playerNode.NeighborNodes) {
+        //    Debug.Log("ESKEREEE");
+        //    Debug.Log(node.ToString());
+        //}
 
         m_isGamePlaying = true;
         yield return new WaitForSeconds(delay);
@@ -185,6 +191,7 @@ public class GameManager : MonoBehaviour {
     void PlayPlayerTurn() {
         m_currentTurn = Turn.Player;
         m_player.IsTurnComplete = false;
+        
     }
 
     void PlayEnemyTurn() {
@@ -225,8 +232,23 @@ public class GameManager : MonoBehaviour {
 
         triggerNode();
         checkNodeForObstacles();
-        
 
+
+        foreach (var enemy in m_enemies)
+        {
+            
+            Debug.Log("Checked");
+            if (enemy!=null) {
+                if (m_board.FindMovableObjectsAt(m_board.FindNodeAt(enemy.transform.TransformVector(new Vector3(0, 0, 2f)) + enemy.transform.position)).Count != 0) {
+                    Debug.Log("LMAO");
+                    enemy.SetMovementType(MovementType.Stationary);
+                }
+                else {
+                    enemy.SetMovementType(enemy.GetFirstMovementType());
+                }
+            }
+            
+        }
 
         if (m_currentTurn == Turn.Player && m_player != null) {
             if (m_player.IsTurnComplete && !AreEnemiesAllDead()) {
@@ -250,18 +272,34 @@ public class GameManager : MonoBehaviour {
         //______ENEMY ON CRACKNODE___________________
 
         List<EnemyManager> enemies;
+        List<MovableObject> movableObjects;
 
         foreach (var node in m_board.CrackableNodes) {
             enemies = m_board.FindEnemiesAt(node);
+            movableObjects = m_board.FindMovableObjectsAt(node);
             foreach (EnemyManager enemy in enemies) {
                 node.UpdateCrackableState();
                 node.UpdateCrackableTexture();
                 //node.GetComponentInChildren<CrackableTexture>().UpdateCrackableTexture();
-
                 if (node.GetCrackableState() == 0) {
                     enemy.Die();
                 }
             }
+
+            //______M.O. ON CRACKNODE___________________
+            foreach (MovableObject movableObject in movableObjects) {
+                node.UpdateCrackableState();
+                node.UpdateCrackableTexture();
+
+                if (node.GetCrackableState() == 0) {
+                    movableObject.transform.position = new Vector3(10, 10, 10);
+                    Destroy(movableObject);
+                    node.transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = null;
+                    node.FromCrackableToNormal();
+                    node.isCrackable = false;
+                }
+            }
+            //______M.O. ON CRACKNODE___________________
         }
 
         //______ENEMY ON CRACKNODE___________________
@@ -303,7 +341,6 @@ public class GameManager : MonoBehaviour {
                 }
                 else if (enemy.GetEnemySensor.GetPreviousEnemyNode() != null) {
                     enemy.GetEnemySensor.GetPreviousEnemyNode().triggerState = false;
-                    Debug.Log("yolo");
                 }
             }
 
@@ -323,13 +360,9 @@ public class GameManager : MonoBehaviour {
 
 
     public List<MovableObject> GetMovableObjects() {
-        Debug.Log("A");
-        foreach (var movObj in m_board.AllMovableObjects) {
-            Debug.Log(movObj);
+        foreach (var movObj in m_board.AllMovableObjects) { 
             foreach (var node in m_board.playerNode.LinkedNodes) {
-                Debug.Log(node);
                 if (movObj.transform.position == node.transform.position) {
-                    Debug.Log("ESKEREEE");
                     m_movableObjects.Add(movObj);
                     
                 }

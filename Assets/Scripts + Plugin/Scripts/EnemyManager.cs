@@ -65,6 +65,16 @@ public class EnemyManager : TurnManager {
         }        
     }
 
+    //public void checkFirstNode()
+    //{
+    //    if (m_board.FindMovableObjectsAt(m_board.FindNodeAt(transform.position + new Vector3(0, 0, 2f))).Count != 0)
+    //    {
+            
+    //        m_enemyMover.Spin();
+    //    }
+    //}
+
+        
     public void Die() {
         if (m_isDead) {
             return;
@@ -75,5 +85,28 @@ public class EnemyManager : TurnManager {
         if (deathEvent != null) {
             deathEvent.Invoke();
         }
+    }
+
+    public void SetMovementType(MovementType mt)
+    {
+        m_enemyMover.movementType = mt; 
+    }
+
+    public MovementType GetMovementType()
+    {
+        return m_enemyMover.movementType;
+    }
+
+    public MovementType GetFirstMovementType()
+    {
+        return m_enemyMover.firstMovementType;
+    }
+
+    public ItemData GetData() {
+        ItemData itemData = new ItemData() {
+            BoardPosition = transform.position,
+            ItemType = ItemData.Type.Enemy,
+        };
+        return itemData;
     }
 }

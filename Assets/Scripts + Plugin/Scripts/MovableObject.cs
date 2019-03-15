@@ -33,18 +33,24 @@ public class MovableObject : Mover {
     }
 
     
-
+    
 
     public void PushRight() {
-        Node movableObjectNode = m_board.FindNodeAt(transform.position);
+        if (m_board != null) {
+            Node movableObjectNode = m_board.FindNodeAt(transform.position);
 
-        if (m_board.playerNode.transform.position.z == movableObjectNode.transform.position.z && Vector3.Distance(movableObjectNode.transform.position, m_board.playerNode.transform.position) < 3f && m_board.playerNode.transform.position.x < movableObjectNode.transform.position.x) {
-            Debug.Log("MoveRight");
-            this.MoveRight();
+            if (m_board.playerNode.transform.position.z == movableObjectNode.transform.position.z && Vector3.Distance(movableObjectNode.transform.position, m_board.playerNode.transform.position) < 3f && m_board.playerNode.transform.position.x < movableObjectNode.transform.position.x) {
+                Debug.Log("MoveRight");
+                this.MoveRight();
+            }
         }
+        
     }
 
     public void PushLeft() {
+        if (m_board != null) {
+
+        }
         Node movableObjectNode = m_board.FindNodeAt(transform.position);
 
         if (m_board.playerNode.transform.position.z == movableObjectNode.transform.position.z && Vector3.Distance(movableObjectNode.transform.position, m_board.playerNode.transform.position) <= 2f && m_board.playerNode.transform.position.x > movableObjectNode.transform.position.x) {
@@ -55,6 +61,10 @@ public class MovableObject : Mover {
     }
 
     public void PushForward() {
+        if (m_board != null) {
+
+        }
+
         Node movableObjectNode = m_board.FindNodeAt(transform.position);
 
         if (m_board.playerNode.transform.position.x == movableObjectNode.transform.position.x && Vector3.Distance(movableObjectNode.transform.position, m_board.playerNode.transform.position) < 3f && m_board.playerNode.transform.position.z < movableObjectNode.transform.position.z) {
@@ -64,49 +74,63 @@ public class MovableObject : Mover {
     }
 
     public void PushBackward() {
-        Node movableObjectNode = m_board.FindNodeAt(transform.position);
+        if (m_board != null) {
+            Node movableObjectNode = m_board.FindNodeAt(transform.position);
 
-        if (m_board.playerNode.transform.position.x == movableObjectNode.transform.position.x && Vector3.Distance(movableObjectNode.transform.position, m_board.playerNode.transform.position) < 3f && m_board.playerNode.transform.position.z > movableObjectNode.transform.position.z) {
-            Debug.Log("MoveRight");
-            this.MoveBackward();
-        }
+            if (m_board.playerNode.transform.position.x == movableObjectNode.transform.position.x && Vector3.Distance(movableObjectNode.transform.position, m_board.playerNode.transform.position) < 3f && m_board.playerNode.transform.position.z > movableObjectNode.transform.position.z) {
+                Debug.Log("MoveRight");
+                this.MoveBackward();
+            }
+        }  
     }
 
     //PUSH___________________________________________
 
     public void PullLeft() {
-        Node movableObjectNode = m_board.FindNodeAt(transform.position);
 
-        if (m_board.playerNode.transform.position.z == movableObjectNode.transform.position.z && Vector3.Distance(movableObjectNode.transform.position, m_board.playerNode.transform.position) < 3f && m_board.playerNode.transform.position.x < movableObjectNode.transform.position.x) {
-            Debug.Log("MoveRight");
-            this.MoveLeft();
+        if (m_board != null) {
+            Node movableObjectNode = m_board.FindNodeAt(transform.position);
+
+            if (m_board.playerNode.transform.position.z == movableObjectNode.transform.position.z && Vector3.Distance(movableObjectNode.transform.position, m_board.playerNode.transform.position) < 3f && m_board.playerNode.transform.position.x < movableObjectNode.transform.position.x) {
+                Debug.Log("MoveRight");
+                this.MoveLeft();
+            }
         }
     }
 
     public void PullRight() {
-        Node movableObjectNode = m_board.FindNodeAt(transform.position);
 
-        if (m_board.playerNode.transform.position.z == movableObjectNode.transform.position.z && Vector3.Distance(movableObjectNode.transform.position, m_board.playerNode.transform.position) < 3f && m_board.playerNode.transform.position.x > movableObjectNode.transform.position.x) {
-            Debug.Log("MoveRight");
-            this.MoveRight();
+        if (m_board != null) {
+            Node movableObjectNode = m_board.FindNodeAt(transform.position);
+
+            if (m_board.playerNode.transform.position.z == movableObjectNode.transform.position.z && Vector3.Distance(movableObjectNode.transform.position, m_board.playerNode.transform.position) < 3f && m_board.playerNode.transform.position.x > movableObjectNode.transform.position.x) {
+                Debug.Log("MoveRight");
+                this.MoveRight();
+            }
         }
     }
 
     public void PullBackward() {
-        Node movableObjectNode = m_board.FindNodeAt(transform.position);
 
-        if (m_board.playerNode.transform.position.x == movableObjectNode.transform.position.x && Vector3.Distance(movableObjectNode.transform.position, m_board.playerNode.transform.position) < 3f && m_board.playerNode.transform.position.z < movableObjectNode.transform.position.z) {
-            Debug.Log("MoveRight");
-            this.MoveBackward();
+        if (m_board != null) {
+            Node movableObjectNode = m_board.FindNodeAt(transform.position);
+
+            if (m_board.playerNode.transform.position.x == movableObjectNode.transform.position.x && Vector3.Distance(movableObjectNode.transform.position, m_board.playerNode.transform.position) < 3f && m_board.playerNode.transform.position.z < movableObjectNode.transform.position.z) {
+                Debug.Log("MoveRight");
+                this.MoveBackward();
+            }
         }
     }
 
     public void PullForward() {
-        Node movableObjectNode = m_board.FindNodeAt(transform.position);
 
-        if (m_board.playerNode.transform.position.x == movableObjectNode.transform.position.x && Vector3.Distance(movableObjectNode.transform.position, m_board.playerNode.transform.position) < 3f && m_board.playerNode.transform.position.z > movableObjectNode.transform.position.z) {
-            Debug.Log("MoveRight");
-            this.MoveForward();
+        if (m_board != null) {
+            Node movableObjectNode = m_board.FindNodeAt(transform.position);
+
+            if (m_board.playerNode.transform.position.x == movableObjectNode.transform.position.x && Vector3.Distance(movableObjectNode.transform.position, m_board.playerNode.transform.position) < 3f && m_board.playerNode.transform.position.z > movableObjectNode.transform.position.z) {
+                Debug.Log("MoveRight");
+                this.MoveForward();
+            }
         }
     }
 
@@ -120,6 +144,7 @@ public class MovableObject : Mover {
         rightBlocked = false;
         downBlocked = false;
         upBlocked = false;
+
 
         Node nextMovableObjectNodeLeft = m_board.FindNodeAt(transform.position + new Vector3(-2f, 0, 0));
         Node nextMovableObjectNodeRight = m_board.FindNodeAt(transform.position + new Vector3(2f, 0, 0));
@@ -141,5 +166,13 @@ public class MovableObject : Mover {
         if ((nextMovableObjectNodeDown == null || m_board.FindMovableObjectsAt(nextMovableObjectNodeDown).Count != 0 || m_board.FindEnemiesAt(nextMovableObjectNodeDown).Count != 0 || !m_board.FindNodeAt(this.transform.position).LinkedNodes.Contains(nextMovableObjectNodeDown) || (nextMovableObjectNodeDown.isAGate && nextMovableObjectNodeDown.GetGateState() == false)) && m_board.playerNode.transform.position == transform.position + new Vector3(0, 0, 2f)) {
             downBlocked = true;
         }
+    }
+
+    public ItemData GetData() {
+        ItemData itemData = new ItemData() {
+            BoardPosition = transform.position,
+            ItemType = ItemData.Type.MovableObject,
+        };
+        return itemData;
     }
 }
