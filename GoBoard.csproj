@@ -298,6 +298,7 @@
     <Compile Include="Assets\Scripts + Plugin\Scripts\GraphicMover.cs" />
     <Compile Include="Assets\Scripts + Plugin\Scripts\ItemData.cs" />
     <Compile Include="Assets\Scripts + Plugin\Scripts\iTween.cs" />
+    <Compile Include="Assets\Scripts + Plugin\Scripts\Laser.cs" />
     <Compile Include="Assets\Scripts + Plugin\Scripts\LevelManager.cs" />
     <Compile Include="Assets\Scripts + Plugin\Scripts\Link.cs" />
     <Compile Include="Assets\Scripts + Plugin\Scripts\MovableObject.cs" />

@@ -200,7 +200,15 @@ public class GameManager : MonoBehaviour {
         foreach (EnemyManager enemy in m_enemies) { //play each enemy's turn
             if (enemy != null && !enemy.isDead) {
                 enemy.IsTurnComplete = false;
-                enemy.PlayTurn();
+
+                if (enemy.isScared == false) {
+                    enemy.PlayTurn();
+                }
+                else {
+                    enemy.PushLeft();
+                    enemy.PushRight();
+                    enemy.PlayTurn();
+                }
             }
         }
     }
@@ -232,15 +240,17 @@ public class GameManager : MonoBehaviour {
 
         triggerNode();
         checkNodeForObstacles();
+        LightBulbNode();
+        FearEnemies();
+        FlashLightNode();
 
 
         foreach (var enemy in m_enemies)
         {
             
-            Debug.Log("Checked");
+            
             if (enemy!=null) {
                 if (m_board.FindMovableObjectsAt(m_board.FindNodeAt(enemy.transform.TransformVector(new Vector3(0, 0, 2f)) + enemy.transform.position)).Count != 0) {
-                    Debug.Log("LMAO");
                     enemy.SetMovementType(MovementType.Stationary);
                 }
                 else {
@@ -292,8 +302,15 @@ public class GameManager : MonoBehaviour {
                 node.UpdateCrackableTexture();
 
                 if (node.GetCrackableState() == 0) {
-                    movableObject.transform.position = new Vector3(10, 10, 10);
-                    Destroy(movableObject);
+                    m_board.AllMovableObjects.Remove(movableObject);
+                    m_movableObjects.Remove(movableObject);
+
+                    //Destroy(movableObject);
+                    movableObject.inScene = false;
+                    movableObject.transform.GetChild(0).gameObject.SetActive(false);
+                    movableObject.GetComponent<Collider>().gameObject.SetActive(false);
+
+
                     node.transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = null;
                     node.FromCrackableToNormal();
                     node.isCrackable = false;
@@ -303,7 +320,7 @@ public class GameManager : MonoBehaviour {
         }
 
         //______ENEMY ON CRACKNODE___________________
-
+        
 
         if (m_board.playerNode.isCrackable) {
             m_board.playerNode.UpdateCrackableState();
@@ -314,6 +331,7 @@ public class GameManager : MonoBehaviour {
             loseLevelEvent.Invoke();
         }
     }
+   
 
     public void triggerNode() {
 
@@ -370,6 +388,45 @@ public class GameManager : MonoBehaviour {
         }
         return m_movableObjects;
     }
+
+
+    public void LightBulbNode() {
+        if (m_board.playerNode.hasLightBulb) {
+            m_board.playerNode.hasLightBulb = false;
+            m_board.playerNode.transform.GetChild(2).gameObject.SetActive(false);
+            m_player.transform.GetChild(2).gameObject.SetActive(true);
+            m_player.hasLightBulb = true;
+            m_player.spottedPlayer = false;
+        }
+    }
+
+    public void FlashLightNode() {
+        if (m_board.playerNode.hasFlashLight) {
+            m_board.playerNode.hasFlashLight = false;
+            m_board.playerNode.transform.GetChild(2).gameObject.SetActive(false);
+            m_player.transform.GetChild(3).gameObject.SetActive(true);
+            m_player.hasFlashLight = true;
+        }
+    }
+
+
+    public void FearEnemies(){
+        if (m_player.hasLightBulb) {
+            foreach (var enemy in m_enemies) {
+                if (enemy != null) {
+                    Node EnemyNode = m_board.FindNodeAt(enemy.transform.position);
+                    if (Vector3.Distance(EnemyNode.transform.position, m_board.playerNode.transform.position) < 2.5f) {
+                        enemy.isScared = true;
+                    }
+                    else if(Vector3.Distance(EnemyNode.transform.position, m_board.playerNode.transform.position) > 2.5f) {
+                        enemy.isScared = false;
+                    }
+                }
+                
+            }
+        } 
+    }
+
 
 
     public void checkNodeForObstacles() {

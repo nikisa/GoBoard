@@ -43,7 +43,7 @@ public class LevelManager : MonoBehaviour {
         LevelsID = levelSaves.LevelsID;
 
         foreach (string levelId in LevelsID) {
-            Debug.LogFormat("Level {0} found!", levelId);
+            //Debug.LogFormat("Level {0} found!", levelId);
             Button newButton = Instantiate<Button>(ButtonLoadLevelPrefab, ButtonsContainer.transform);
             newButton.GetComponentInChildren<Text>().text = levelId;
             newButton.onClick.AddListener(() => LoadLevel(levelId));

@@ -27,10 +27,14 @@ public class Mover : MonoBehaviour {
 
     public UnityEvent finishMovementEvent;
 
+    protected PlayerManager m_player;
+
+
 
     // Use this for initialization
     protected virtual void Awake() {
         m_board = Object.FindObjectOfType<Board>().GetComponent<Board>();
+        m_player = Object.FindObjectOfType<PlayerManager>().GetComponent<PlayerManager>();
     }
 
     protected virtual void Start() {

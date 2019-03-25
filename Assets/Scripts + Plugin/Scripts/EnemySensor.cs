@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemySensor : MonoBehaviour {
 
-    public Vector3 directionToSearch = new Vector3(0f, 0f, 2f);
+    public Vector3 directionToSearch = new Vector3(0f, 0f, Board.spacing);
 
     Node m_nodeToSearch;
     Board m_board;

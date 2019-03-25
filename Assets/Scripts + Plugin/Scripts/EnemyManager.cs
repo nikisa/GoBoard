@@ -16,10 +16,13 @@ public class EnemyManager : TurnManager {
     EnemyDeath m_enemyDeath;
     Board m_board;
 
+    PlayerManager m_player;
 
     
 
     bool m_isDead = false;
+    public bool isScared = false;
+
     public bool isDead { get { return m_isDead; } }
 
     public UnityEvent deathEvent;
@@ -28,15 +31,16 @@ public class EnemyManager : TurnManager {
 
         base.Awake();
 
-        m_board = GetComponent<Board>();
+        m_board = Object.FindObjectOfType<Board>().GetComponent<Board>();
         m_enemyMover = GetComponent<EnemyMover>();
         m_enemySensor = GetComponent<EnemySensor>();
         m_enemyDeath = GetComponent<EnemyDeath>();
+        m_player = Object.FindObjectOfType<PlayerManager>().GetComponent<PlayerManager>();
     }
 
     public void PlayTurn() {
         
-        if (m_isDead) {
+        if (m_isDead || isScared) {
             FinishTurn();
             return;
         }
@@ -52,9 +56,10 @@ public class EnemyManager : TurnManager {
 
             yield return new WaitForSeconds(0f);
 
-            if (m_enemySensor.FoundPlayer) {
+            if (m_enemySensor.FoundPlayer && isScared == false) {
                 //attack player
                 //notify the GM to lose the level
+                
                 m_gameManager.LoseLevel();
             }
             else {
@@ -101,6 +106,38 @@ public class EnemyManager : TurnManager {
     {
         return m_enemyMover.firstMovementType;
     }
+
+
+    public void PushLeft() {
+        if (m_player.hasLightBulb) {
+            
+            Node EnemyNode = m_board.FindNodeAt(transform.position);
+
+            if (m_board.playerNode.transform.position.z == EnemyNode.transform.position.z && Vector3.Distance(EnemyNode.transform.position, m_board.playerNode.transform.position) <= 2f && m_board.playerNode.transform.position.x > EnemyNode.transform.position.x) {
+                Debug.Log("MoveRight");
+                m_enemyMover.MoveLeft();
+            }
+        }
+    }
+
+    public void PushRight() {
+        if (m_player.hasLightBulb) {
+
+            Node EnemyNode = m_board.FindNodeAt(transform.position);
+
+            if (m_board.playerNode.transform.position.z == EnemyNode.transform.position.z && Vector3.Distance(EnemyNode.transform.position, m_board.playerNode.transform.position) < 3f && m_board.playerNode.transform.position.x < EnemyNode.transform.position.x) {
+                Debug.Log("MoveRight");
+                m_enemyMover.MoveRight();
+            }
+        }
+    }
+
+
+    //PUSH UP
+
+
+    //PUSH DOWN
+
 
     public ItemData GetData() {
         ItemData itemData = new ItemData() {

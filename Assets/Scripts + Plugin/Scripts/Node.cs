@@ -16,6 +16,13 @@ public class Node : MonoBehaviour {
     
     Board m_board;
 
+    public GameObject switchPrefab;
+    public GameObject gatePrefab;
+    public GameObject triggerPrefab;
+    public GameObject lightBulbPrefab;
+    public GameObject flashlitePrefab;
+
+
     public GameObject geometry;
 
     public GameObject linkPrefab;
@@ -50,6 +57,10 @@ public class Node : MonoBehaviour {
 
     public bool gateOpen = false;
 
+    public bool hasLightBulb = false;
+
+    public bool hasFlashLight = false;
+
     public int gateID = 0;
 
     private Vector3 m_nodePosition;
@@ -72,6 +83,7 @@ public class Node : MonoBehaviour {
 
             if (m_board != null) {
                 m_neighborNodes = FindNeighbors(m_board.AllNodes);
+                showModel();
             }
         }
     }
@@ -195,33 +207,23 @@ public class Node : MonoBehaviour {
     }
 
     public bool UpdateTriggerToTrue() {
-
-        if (m_nodePosition != transform.position) {
-            StaticCounter.triggerCounter++;
-        }
-        UpdateGateToOpen();
-
+        UpdateGateToOpen(gateID);
         return triggerState = true;
+
     }//UpdateTriggerToFalse --> in Board
 
-    public bool UpdateTriggerToFalse() {
-        return triggerState = false;
-    }
 
     public bool GetSwitchState() {
         return switchState;
     }
 
     public bool UpdateSwitchToTrue() {
-        if (m_nodePosition != transform.position) {
-            StaticCounter.switchCounter++;
-        }
-        UpdateGateToOpen();
+        UpdateGateToOpen(gateID);
         return switchState = true;
     }
 
     public bool UpdateSwitchToFalse() {
-        UpdateGateToClose();
+        UpdateGateToClose(gateID);
         return switchState = false;
     }
 
@@ -242,26 +244,60 @@ public class Node : MonoBehaviour {
         gateOpen = false;
     }
 
-    public bool UpdateGateToOpen() {
+    public bool UpdateGateToOpen(int id) {
         gateOpen = false;
 
         foreach (var node in m_board.AllNodes) {
-            if (node.GetGateID() == StaticCounter.switchCounter || node.GetGateID() == StaticCounter.triggerCounter) {
+            if (node.GetGateID() == id) {
                 node.SetGateOpen();
             }
         }
         return gateOpen;
     }
 
-    public bool UpdateGateToClose() {
+    public bool UpdateGateToClose(int id) {
         gateOpen = true;
 
         foreach (var node in m_board.AllNodes) {
-            if (node.GetGateID() == StaticCounter.switchCounter || node.GetGateID() == StaticCounter.triggerCounter) {
+            if (node.GetGateID() == id) {
                 node.SetGateClose();
             }
         }
         return gateOpen;
+    }
+
+    public void showModel() {
+        if (isASwitch) {
+            Instantiate(switchPrefab, transform.position, Quaternion.identity);
+        }
+
+        if (isATrigger) {
+            GameObject triggerTemp;
+            triggerTemp = Instantiate(triggerPrefab, transform.position, Quaternion.identity);
+            triggerTemp.transform.Rotate(-90,0,0);
+        }
+
+        if (isAGate) {
+            GameObject gateTemp;
+            gateTemp = Instantiate(gatePrefab, transform.position, Quaternion.identity);
+            gateTemp.transform.Rotate(0, 90, 0);
+        }
+
+        if (hasLightBulb) {
+            GameObject lightBulbTemp;
+            lightBulbTemp = Instantiate(lightBulbPrefab, transform.position, Quaternion.identity);
+            lightBulbTemp.transform.position += new Vector3(0, 1.5f, 0);
+            lightBulbTemp.transform.parent = transform;
+            
+        }
+
+        if (hasFlashLight) {
+            GameObject flashliteTemp;
+            flashliteTemp = Instantiate(flashlitePrefab, transform.position, Quaternion.identity);
+            flashliteTemp.transform.position += new Vector3(0, -.8f, 0);
+            flashliteTemp.transform.parent = transform;
+
+        }
     }
 
     public ItemData GetData() {

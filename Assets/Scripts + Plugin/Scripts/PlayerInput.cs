@@ -17,6 +17,9 @@ public class PlayerInput : MonoBehaviour {
     bool m_p;
     public bool P { get { return m_p; } }
 
+    bool m_f;
+    public bool F { get { return m_f; } }
+
 
     bool m_inputEnabled = false;
     public bool InputEnabled {
@@ -37,8 +40,10 @@ public class PlayerInput : MonoBehaviour {
         if (m_inputEnabled) {
             m_h = Input.GetAxisRaw("Horizontal");
             m_v = Input.GetAxisRaw("Vertical");
-            m_s = Input.GetKeyDown(KeyCode.Return);
+            m_s = Input.GetKeyDown(KeyCode.Return);//???
             m_p = Input.GetKey(KeyCode.LeftShift);
+            m_f = Input.GetKey(KeyCode.F);
+
 
 
         }
@@ -47,6 +52,7 @@ public class PlayerInput : MonoBehaviour {
             m_v = 0f;
             m_s = false;
             m_p = false;
+            m_f = false;
         }
     }
 }

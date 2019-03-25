@@ -40,7 +40,10 @@ public class Board : MonoBehaviour {
     Node m_previousPlayerNode;
     public Node PreviousPlayerNode { get { return m_previousPlayerNode; } set { m_previousPlayerNode = playerNode;} }
 
-    
+    Node m_chaserNewDest;
+    public Node ChaserNewDest { get { return m_chaserNewDest; } set { m_chaserNewDest = PreviousPlayerNode; } }
+
+
     public GameObject goalPrefab;
     public float drawGoalTime = 2f;
     public float drawGoalDelay = 2f;
@@ -152,6 +155,7 @@ public class Board : MonoBehaviour {
 
     public void UpdateTriggerToFalse() {
         PreviousPlayerNode.triggerState = false;
+        PreviousPlayerNode.UpdateGateToClose(PreviousPlayerNode.GetGateID());
     }
 
     

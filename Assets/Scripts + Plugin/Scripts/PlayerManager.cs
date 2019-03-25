@@ -10,8 +10,16 @@ public class PlayerManager : TurnManager {
     public PlayerMover playerMover;
     public PlayerInput playerInput;
 
+    [HideInInspector] public bool spottedPlayer = false;
+
+
+    public bool hasLightBulb = false;
+    public bool hasFlashLight = false;
+
     Board m_board;
     GameManager m_gm;
+
+
     
     protected override void Awake() {
         base.Awake();
@@ -21,7 +29,8 @@ public class PlayerManager : TurnManager {
 
         m_board = Object.FindObjectOfType<Board>().GetComponent<Board>();
         m_gm = Object.FindObjectOfType<GameManager>().GetComponent<GameManager>();
-        
+
+
     }
 
     void Update() {
@@ -32,6 +41,7 @@ public class PlayerManager : TurnManager {
         playerInput.GetKeyInput();
 
         if (m_board.playerNode != null) {
+            
             if (m_board.playerNode.isASwitch && playerInput.S) {
                 Debug.Log("S");
                 bool switchState = m_board.playerNode.GetSwitchState();
@@ -43,7 +53,7 @@ public class PlayerManager : TurnManager {
                 }
             }
 
-            if (playerInput.V == 0) {
+            if (playerInput.V == 0 && !playerInput.F) {
                 if (playerInput.H < 0) {
                     if (playerInput.P && m_board.FindMovableObjectsAt(m_board.FindNodeAt(m_board.playerNode.transform.position + new Vector3(-2f, 0, 0))).Count == 0) { //Aggiunto AND per evtiare di entrare nei MO facendo la pull verso di essi
                         playerMover.MoveLeft();
@@ -88,7 +98,7 @@ public class PlayerManager : TurnManager {
                 }
 
             }
-            else if (playerInput.H == 0) {
+            else if (playerInput.H == 0 && !playerInput.F) {
                 if (playerInput.V < 0) {
                     if (playerInput.P && m_board.FindMovableObjectsAt(m_board.FindNodeAt(m_board.playerNode.transform.position + new Vector3(0, 0, -2f))).Count == 0) {
                         playerMover.MoveBackward();
@@ -129,6 +139,74 @@ public class PlayerManager : TurnManager {
                     }
                 }
             }
+
+            if (hasFlashLight) {
+                if (playerInput.F && playerInput.V > 0) {//sparo in alto
+                    RaycastHit hit;
+                    if (Physics.Raycast(transform.position, Vector3.forward, out hit, 100)) {
+                        switch (hit.collider.tag) {
+                            case "Enemy":
+                                hit.collider.GetComponent<EnemyManager>().Die(); break;
+                            case "Mirror":
+                                break;
+                            case "Wall":
+                                break;
+                        }
+                    }
+                }
+
+                if (playerInput.F && playerInput.V < 0) {//sparo in basso
+                    RaycastHit hit;
+                    if (Physics.Raycast(transform.position, Vector3.back, out hit, 100)) {
+
+                        Gizmos.color = Color.red;
+                        Gizmos.DrawRay(transform.position, Vector3.back);
+
+                        switch (hit.collider.tag) {
+                            case "Enemy":
+                                hit.collider.GetComponent<EnemyManager>().Die();
+                                break;
+                            case "Mirror":
+                                break;
+                            case "Wall":
+                                break;
+                        }
+                    }
+                }
+
+                if (playerInput.F && playerInput.H > 0) {//sparo a destra
+                    RaycastHit hit;
+                    if (Physics.Raycast(transform.position, Vector3.right, out hit, 100)) {
+                        switch (hit.collider.tag) {
+                            case "Enemy":
+                                hit.collider.GetComponent<EnemyManager>().Die(); break;
+                            case "Mirror":
+                                break;
+                            case "Wall":
+                                break;
+                        }
+                    }
+                }
+
+                if (playerInput.F && playerInput.H < 0) {//sparo a sinistra
+                    RaycastHit hit;
+                    if (Physics.Raycast(transform.position, Vector3.left, out hit, 100)) {
+                        switch (hit.collider.tag) {
+                            case "Enemy":
+                                hit.collider.GetComponent<EnemyManager>().Die(); break;
+                            case "Mirror":
+                                break;
+                            case "Wall":
+                                break;
+                        }
+                    }
+                }
+            }
+            
+
+
+
+
         }   
     }
 
@@ -137,8 +215,12 @@ public class PlayerManager : TurnManager {
             List<EnemyManager> enemies = m_board.FindEnemiesAt(m_board.playerNode);
             if (enemies.Count != 0) {
                 foreach (EnemyManager enemy in enemies) {
-                    if (enemy != null) {
+                    if (enemy != null && enemy.GetMovementType() != MovementType.Chaser) {
                         enemy.Die();
+                    }
+                    else if (enemy.GetMovementType() == MovementType.Chaser) {
+                        Debug.Log("DEATH");
+                        m_gm.LoseLevel();
                     }
                 }
             }
@@ -149,6 +231,7 @@ public class PlayerManager : TurnManager {
         CaptureEnemies();
         base.FinishTurn();
     }
+    
 
     public ItemData GetData() {
         ItemData itemData = new ItemData() {
