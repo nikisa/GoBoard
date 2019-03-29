@@ -28,7 +28,10 @@ public class Board : MonoBehaviour {
 
     List<MovableObject> m_AllmovableObjects = new List<MovableObject>();
     public List<MovableObject> AllMovableObjects { get { return m_AllmovableObjects; }}
-    
+
+    List<Mirror> m_AllMirrors = new List<Mirror>();
+    public List<Mirror> AllMirrors { get { return m_AllMirrors; } }
+
 
     Node m_playerNode;
 
@@ -40,8 +43,12 @@ public class Board : MonoBehaviour {
     Node m_previousPlayerNode;
     public Node PreviousPlayerNode { get { return m_previousPlayerNode; } set { m_previousPlayerNode = playerNode;} }
 
+
+    Node m_chasingPreviousPlayerNode;
+    public Node ChasingPreviousPlayerNode { get { return m_chasingPreviousPlayerNode; } set { m_chasingPreviousPlayerNode = playerNode; } }
+
     Node m_chaserNewDest;
-    public Node ChaserNewDest { get { return m_chaserNewDest; } set { m_chaserNewDest = PreviousPlayerNode; } }
+    public Node ChaserNewDest { get { return m_chaserNewDest; } set { m_chaserNewDest = ChasingPreviousPlayerNode; } }
 
 
     public GameObject goalPrefab;
@@ -64,6 +71,8 @@ public class Board : MonoBehaviour {
     void Awake() {
         m_player = Object.FindObjectOfType<PlayerMover>().GetComponent<PlayerMover>();
 
+
+        m_AllMirrors = FindMirrors();
         m_AllmovableObjects = FindMovableObjects();
         
         GetNodeList();
@@ -145,7 +154,7 @@ public class Board : MonoBehaviour {
     }
 
 
-    public void SetPreviousPlayerNode(Node n) {
+    public void SetPreviousPlayerNode(Node n) { //Cambiare il nome qui o su Enemy Mover
         PreviousPlayerNode = n; 
     }
 
@@ -167,8 +176,16 @@ public class Board : MonoBehaviour {
         return foundMovableObjects;
     }
 
+    public List<Mirror> FindMirrors() {
+        List<Mirror> foundMirrors = new List<Mirror>();
+        Mirror[] mirrors = Object.FindObjectsOfType<Mirror>() as Mirror[];
+        foundMirrors = mirrors.ToList();
 
-    
+        return foundMirrors;
+    }
+
+
+
 
     public void DrawGoal() {
         if (goalPrefab != null && m_goalNode != null) {

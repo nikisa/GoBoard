@@ -301,6 +301,7 @@
     <Compile Include="Assets\Scripts + Plugin\Scripts\Laser.cs" />
     <Compile Include="Assets\Scripts + Plugin\Scripts\LevelManager.cs" />
     <Compile Include="Assets\Scripts + Plugin\Scripts\Link.cs" />
+    <Compile Include="Assets\Scripts + Plugin\Scripts\Mirror.cs" />
     <Compile Include="Assets\Scripts + Plugin\Scripts\MovableObject.cs" />
     <Compile Include="Assets\Scripts + Plugin\Scripts\Mover.cs" />
     <Compile Include="Assets\Scripts + Plugin\Scripts\Node.cs" />

@@ -207,6 +207,8 @@ public class GameManager : MonoBehaviour {
                 else {
                     enemy.PushLeft();
                     enemy.PushRight();
+                    enemy.PushUp();
+                    enemy.PushDown();
                     enemy.PlayTurn();
                 }
             }
@@ -355,7 +357,7 @@ public class GameManager : MonoBehaviour {
                 if (enemy.GetEnemySensor.FindEnemyNode().isATrigger) {
                     enemy.GetEnemySensor.SetPreviousEnemyNode(enemy.GetEnemySensor.FindEnemyNode());
                     enemy.GetEnemySensor.FindEnemyNode().UpdateTriggerToTrue();
-                    Debug.Log(enemy.GetEnemySensor.GetPreviousEnemyNode());
+                    //Debug.Log(enemy.GetEnemySensor.GetPreviousEnemyNode());
                 }
                 else if (enemy.GetEnemySensor.GetPreviousEnemyNode() != null) {
                     enemy.GetEnemySensor.GetPreviousEnemyNode().triggerState = false;

@@ -22,6 +22,8 @@ public class Node : MonoBehaviour {
     public GameObject lightBulbPrefab;
     public GameObject flashlitePrefab;
 
+    GameObject gateTemp;
+
 
     public GameObject geometry;
 
@@ -63,6 +65,8 @@ public class Node : MonoBehaviour {
 
     public int gateID = 0;
 
+    public int mirrorID = 0;
+
     private Vector3 m_nodePosition;
 
     public Sprite[] sprites;
@@ -78,6 +82,7 @@ public class Node : MonoBehaviour {
 
     // Use this for initialization
     void Start() {
+
         if (geometry != null) {
             geometry.transform.localScale = Vector3.zero;
 
@@ -219,11 +224,28 @@ public class Node : MonoBehaviour {
 
     public bool UpdateSwitchToTrue() {
         UpdateGateToOpen(gateID);
+
+        if (mirrorID != 0) {
+            foreach (var mirror in m_board.AllMirrors) {
+                if (mirror.mirrorID == mirrorID) {
+                    mirror.UpdateMirrorRotation();
+                }
+            }
+        }
         return switchState = true;
     }
 
     public bool UpdateSwitchToFalse() {
         UpdateGateToClose(gateID);
+
+        if (mirrorID != 0) {
+            foreach (var mirror in m_board.AllMirrors) {
+                if (mirror.mirrorID == mirrorID) {
+                    mirror.UpdateMirrorRotation();
+                }
+            }
+        }
+
         return switchState = false;
     }
 
@@ -235,13 +257,23 @@ public class Node : MonoBehaviour {
         return gateID;
     }
 
+    public int GetMirrorID() {
+        return mirrorID;
+    }
+
 
     public void SetGateOpen() {
         gateOpen = true;
+        //gateTemp.transform.GetChild(0).gameObject.SetActive(true);
+        //gateTemp.transform.GetChild(1).gameObject.SetActive(false);
     }
 
     public void SetGateClose() {
         gateOpen = false;
+
+        //gateTemp.transform.GetChild(0).gameObject.SetActive(false);
+        //gateTemp.transform.GetChild(1).gameObject.SetActive(true);
+
     }
 
     public bool UpdateGateToOpen(int id) {
@@ -278,9 +310,10 @@ public class Node : MonoBehaviour {
         }
 
         if (isAGate) {
-            GameObject gateTemp;
+            
             gateTemp = Instantiate(gatePrefab, transform.position, Quaternion.identity);
             gateTemp.transform.Rotate(0, 90, 0);
+            gateTemp.transform.position += new Vector3(0,1,0);
         }
 
         if (hasLightBulb) {

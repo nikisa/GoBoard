@@ -70,14 +70,6 @@ public class EnemyManager : TurnManager {
         }        
     }
 
-    //public void checkFirstNode()
-    //{
-    //    if (m_board.FindMovableObjectsAt(m_board.FindNodeAt(transform.position + new Vector3(0, 0, 2f))).Count != 0)
-    //    {
-            
-    //        m_enemyMover.Spin();
-    //    }
-    //}
 
         
     public void Die() {
@@ -114,7 +106,7 @@ public class EnemyManager : TurnManager {
             Node EnemyNode = m_board.FindNodeAt(transform.position);
 
             if (m_board.playerNode.transform.position.z == EnemyNode.transform.position.z && Vector3.Distance(EnemyNode.transform.position, m_board.playerNode.transform.position) <= 2f && m_board.playerNode.transform.position.x > EnemyNode.transform.position.x) {
-                Debug.Log("MoveRight");
+                Debug.Log("MoveLeft");
                 m_enemyMover.MoveLeft();
             }
         }
@@ -134,9 +126,33 @@ public class EnemyManager : TurnManager {
 
 
     //PUSH UP
+    public void PushUp() {
+        if (m_player.hasLightBulb) {
+
+            Node EnemyNode = m_board.FindNodeAt(transform.position);
+
+            if (m_board.playerNode.transform.position.x == EnemyNode.transform.position.x && Vector3.Distance(EnemyNode.transform.position, m_board.playerNode.transform.position) < 3f && m_board.playerNode.transform.position.z < EnemyNode.transform.position.z) {
+                Debug.Log("MoveUp");
+                m_enemyMover.MoveForward();
+            }
+        }
+    }
+
 
 
     //PUSH DOWN
+    public void PushDown() {
+        if (m_player.hasLightBulb) {
+
+            Node EnemyNode = m_board.FindNodeAt(transform.position);
+
+            if (m_board.playerNode.transform.position.x == EnemyNode.transform.position.x && Vector3.Distance(EnemyNode.transform.position, m_board.playerNode.transform.position) < 3f && m_board.playerNode.transform.position.z > EnemyNode.transform.position.z) {
+                Debug.Log("MoveDown");
+                m_enemyMover.MoveBackward();
+            }
+        }
+    }
+
 
 
     public ItemData GetData() {

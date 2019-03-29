@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
+/// <summary>
+/// DUE ENEMIES COMPENETRANO TRA LORO SE UNO VIENE SPINTO NELLA TRAIETTORIA DELL'ALTRO
+/// </summary>
+
+
 public enum MovementType {
     Stationary,
     Patrol,
@@ -66,7 +71,7 @@ public class EnemyMover : Mover {
 
             Debug.Log("Spotted!");
             
-            m_board.PreviousPlayerNode = m_board.playerNode;
+            m_board.ChasingPreviousPlayerNode = m_board.playerNode; //Cambiare PreviousPlayerNode , qui o su Board
             Move(firstDest , 0f);
             m_player.spottedPlayer = true;
 
@@ -77,8 +82,10 @@ public class EnemyMover : Mover {
             Debug.Log("Chasing...");
             Debug.Log(spottedDest);
 
-            m_board.ChaserNewDest = m_board.PreviousPlayerNode;
-            m_board.PreviousPlayerNode = m_board.playerNode;
+            m_board.ChaserNewDest = m_board.ChasingPreviousPlayerNode;
+            m_board.ChasingPreviousPlayerNode = m_board.playerNode;
+
+            Debug.Log(m_board.ChasingPreviousPlayerNode);
 
             Move(m_board.ChaserNewDest.transform.position, 0f);
         }

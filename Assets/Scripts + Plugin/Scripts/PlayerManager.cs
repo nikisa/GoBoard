@@ -10,6 +10,8 @@ public class PlayerManager : TurnManager {
     public PlayerMover playerMover;
     public PlayerInput playerInput;
 
+    public LayerMask obstacleLayer;
+
     [HideInInspector] public bool spottedPlayer = false;
 
 
@@ -50,6 +52,7 @@ public class PlayerManager : TurnManager {
                 }
                 else {
                     m_board.playerNode.UpdateSwitchToTrue();
+
                 }
             }
 
@@ -65,7 +68,7 @@ public class PlayerManager : TurnManager {
                         if (m_board.FindMovableObjectsAt(m_board.FindNodeAt(m_board.playerNode.transform.position + new Vector3(-2f, 0, 0))).Count != 0 && !m_board.FindMovableObjectsAt(m_board.FindNodeAt(m_board.playerNode.transform.position + new Vector3(-2f, 0, 0)))[0].leftBlocked) { //Se alla nostra Sx c'è un M.O e non è bloccato
 
                             foreach (var movableObject in m_gm.GetMovableObjects()) {
-                                movableObject.PushLeft();
+                                movableObject.PushLeft();                                
                             }
                             playerMover.MoveLeft();
 
@@ -143,11 +146,30 @@ public class PlayerManager : TurnManager {
             if (hasFlashLight) {
                 if (playerInput.F && playerInput.V > 0) {//sparo in alto
                     RaycastHit hit;
-                    if (Physics.Raycast(transform.position, Vector3.forward, out hit, 100)) {
+                    if (Physics.Raycast(transform.position, Vector3.forward, out hit, 100 , obstacleLayer)) {
+                        Debug.Log("Shoot up");
+                        Debug.DrawRay(GetComponent<PlayerManager>().transform.position + new Vector3(0, 0.5f), Vector3.up * hit.distance, Color.red);
+
                         switch (hit.collider.tag) {
                             case "Enemy":
                                 hit.collider.GetComponent<EnemyManager>().Die(); break;
                             case "Mirror":
+                                int index = (hit.collider.GetComponent<Mirror>().getIndex())%4;
+
+                                switch (index) {
+
+                                    case 0:
+                                        hit.collider.GetComponent<Mirror>().MirrorShootRight();
+                                        Debug.Log("case 0");
+                                        break;
+
+                                    case 1: hit.collider.GetComponent<Mirror>().MirrorShootLeft();
+                                        Debug.Log("case 1");
+                                        break;
+                                    
+                                }
+
+
                                 break;
                             case "Wall":
                                 break;
@@ -157,16 +179,32 @@ public class PlayerManager : TurnManager {
 
                 if (playerInput.F && playerInput.V < 0) {//sparo in basso
                     RaycastHit hit;
-                    if (Physics.Raycast(transform.position, Vector3.back, out hit, 100)) {
+                    if (Physics.Raycast(transform.position, Vector3.back, out hit, 100, obstacleLayer)) {
 
-                        Gizmos.color = Color.red;
-                        Gizmos.DrawRay(transform.position, Vector3.back);
+                        Debug.DrawRay(GetComponent<PlayerManager>().transform.position + new Vector3(0, 0.5f), Vector3.back * hit.distance, Color.red);
 
                         switch (hit.collider.tag) {
                             case "Enemy":
                                 hit.collider.GetComponent<EnemyManager>().Die();
                                 break;
                             case "Mirror":
+
+                                int index = (hit.collider.GetComponent<Mirror>().getIndex()) % 4;
+
+                                switch (index) {
+
+                                    case 2:
+                                        hit.collider.GetComponent<Mirror>().MirrorShootLeft();
+                                        Debug.Log("case 2");
+                                        break;
+
+                                    case 3:
+                                        hit.collider.GetComponent<Mirror>().MirrorShootRight();
+                                        Debug.Log("case 3");
+                                        break;
+
+                                }
+
                                 break;
                             case "Wall":
                                 break;
@@ -176,11 +214,31 @@ public class PlayerManager : TurnManager {
 
                 if (playerInput.F && playerInput.H > 0) {//sparo a destra
                     RaycastHit hit;
-                    if (Physics.Raycast(transform.position, Vector3.right, out hit, 100)) {
+                    if (Physics.Raycast(transform.position, Vector3.right, out hit, 100, obstacleLayer)) {
+
+                        Debug.DrawRay(GetComponent<PlayerManager>().transform.position + new Vector3(0, 0.5f), Vector3.right * hit.distance, Color.red);
+
                         switch (hit.collider.tag) {
                             case "Enemy":
                                 hit.collider.GetComponent<EnemyManager>().Die(); break;
                             case "Mirror":
+
+                                int index = (hit.collider.GetComponent<Mirror>().getIndex()) % 4;
+
+                                switch (index) {
+
+                                    case 1:
+                                        hit.collider.GetComponent<Mirror>().MirrorShootDown();
+                                        Debug.Log("case 1");
+                                        break;
+
+                                    case 2:
+                                        hit.collider.GetComponent<Mirror>().MirrorShootUp();
+                                        Debug.Log("case 2");
+                                        break;
+
+                                }
+
                                 break;
                             case "Wall":
                                 break;
@@ -190,11 +248,32 @@ public class PlayerManager : TurnManager {
 
                 if (playerInput.F && playerInput.H < 0) {//sparo a sinistra
                     RaycastHit hit;
-                    if (Physics.Raycast(transform.position, Vector3.left, out hit, 100)) {
+                    if (Physics.Raycast(transform.position, Vector3.left, out hit, 100, obstacleLayer)) {
+
+                        Debug.DrawRay(GetComponent<PlayerManager>().transform.position + new Vector3(0, 0.5f), Vector3.left * hit.distance, Color.red);
+
                         switch (hit.collider.tag) {
                             case "Enemy":
                                 hit.collider.GetComponent<EnemyManager>().Die(); break;
                             case "Mirror":
+
+                                int index = (hit.collider.GetComponent<Mirror>().getIndex()) % 4;
+
+                                switch (index) {
+
+                                    case 0:
+                                        hit.collider.GetComponent<Mirror>().MirrorShootDown();
+                                        Debug.Log("case 0");
+                                        break;
+
+                                    case 3:
+                                        hit.collider.GetComponent<Mirror>().MirrorShootUp();
+                                        Debug.Log("case 3");
+                                        break;
+
+                                }
+
+
                                 break;
                             case "Wall":
                                 break;

@@ -6,10 +6,10 @@ public class MovableObject : Mover {
 
     public bool inScene = true;
 
-    public bool upBlocked = false;
-    public bool downBlocked = false;
-    public bool leftBlocked = false;
-    public bool rightBlocked = false;
+     public bool upBlocked = false;
+     public bool downBlocked = false;
+     public bool leftBlocked = false;
+     public bool rightBlocked = false;
 
 
     private Node m_previousMovableObjectNode;

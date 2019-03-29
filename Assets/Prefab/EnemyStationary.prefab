@@ -25,6 +25,7 @@ GameObject:
   - component: {fileID: 114747800519993504}
   - component: {fileID: 114717928136763154}
   - component: {fileID: 114295402586766340}
+  - component: {fileID: 65559019812378994}
   m_Layer: 0
   m_Name: EnemyStationary
   m_TagString: Untagged
@@ -90,6 +91,18 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1474127026450234}
   m_Mesh: {fileID: 4300002, guid: 8da28179aa1f95d4091ce2b741f847d9, type: 3}
+--- !u!65 &65559019812378994
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1474127026450234}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2.2914095, y: 2.1804771, z: 0.6852874}
+  m_Center: {x: 0.000010788443, y: 1.0815327, z: 0.09004835}
 --- !u!114 &114066926092187266
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -125,6 +138,7 @@ MonoBehaviour:
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   directionToMove: {x: 0, y: 0, z: 2}
+  firstMovementType: 0
   movementType: 0
   standTime: 1
 --- !u!114 &114295402586766340
@@ -162,6 +176,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 647340f5aa199744bb070daac6b66029, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isScared: 0
   deathEvent:
     m_PersistentCalls:
       m_Calls:
