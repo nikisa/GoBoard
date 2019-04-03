@@ -1,6 +1,6 @@
 WindowsStandalone
 PlayerPath?
-C:/Users/nikisa/Desktop/Progetti Unity/GoBoard/build v.6.exe
+C:/Users/nikisa/Desktop/build v0.6/build v.6.exe
 SceneListBegin?
 Assets/Scenes/Level1-4.unity
 SceneListEnd?
@@ -126,7 +126,7 @@ c2275a8bfbb9f9942cad75ecdfded41d UnityEngine.HoloLens.dll:UnityEngine.XR.WSA.Spa
 45f3431f0103c41611e8d4eec3d439df UnityEngine.HoloLens.dll:UnityEngine.XR.WSA.SpatialMappingRenderer
 0a8af3695cd024840dad2845c3d34758 Assembly-CSharp.dll:.Link
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.TurnManager
-ce6c4fd78337ffc499d9cc0270fe410d Assembly-CSharp.dll:.EnemyManager
+d530230e37ef3730dab9b27ce0f3d4fe Assembly-CSharp.dll:.EnemyManager
 d44c6b1778ed21aacffee3e9d3a796a6 Assembly-CSharp.dll:.ScreenFader
 26f4480e743322385c61bd73c56d2c8f Assembly-CSharp.dll:.EnemyDeath
 abb339eb46e09e65bcf58583ff9d2ab8 Assembly-CSharp.dll:.EnemySensor
@@ -155,7 +155,7 @@ de7d7a4baecc8aaf72ea801e401d9e19 Assembly-CSharp.dll:.GraphicMover
 05524b8f659e7bfe5756d1335fec24ba UnityEngine.TestRunner.dll:UnityEngine.TestTools.TestRunner.Callbacks.PlayModeRunnerCallback
 96d0fbde9fd209878a0a291f82c9bcdd UnityEngine.TestRunner.dll:UnityEngine.TestTools.TestRunner.PlaymodeTestsController
 64eb32cc721b1cc68a91ed57461e188c UnityEngine.TestRunner.dll:UnityEngine.TestTools.TestRunner.Callbacks.RemoteTestResultSender
-e469705b2c588bb4cf72043afa10e681 Assembly-CSharp.dll:.EnemyMover
+b4a90e1af9fa27ecc7e01dffa7a1b1f5 Assembly-CSharp.dll:.EnemyMover
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.Obstacle
 9e0ef5bf862444b5dc48b5a99554ce7c UnityEngine.GoogleAudioSpatializer.dll:UnityEngine.Experimental.Audio.Google.GvrAudioListenerExtension
 e0f7ffd5d5c2abe4b2e16569a21163da UnityEngine.GoogleAudioSpatializer.dll:UnityEngine.Experimental.Audio.Google.GvrAudioRoom
@@ -174,7 +174,7 @@ fdd66755c77f07ad09d2333fc4081969 Assembly-CSharp.dll:.PlayerManager
 53943bf8aae90c9c1fd930323966ce2d Assembly-CSharp.dll:.EndScreen
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.RotateSample
 21c9cb2cd48c7954eca3329ba4443b95 Assembly-CSharp.dll:.pg_SceneMeshRender
-b8e7b6227abbad7c6b0713a23e6b38b0 Assembly-CSharp.dll:.GameManager
+0ea3b1588ad0f9d5ed4e120e8f4cbb27 Assembly-CSharp.dll:.GameManager
 f671a42aea5f34fec6a4450a3668c615 Assembly-CSharp.dll:UnityEngine.PostProcessing.PostProcessingProfile
 9de3a22eca9aefadba2d10d5987cefe3 UnityEngine.SpatialTracking.dll:UnityEngine.SpatialTracking.TrackedPoseDriver
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.PlayerInput

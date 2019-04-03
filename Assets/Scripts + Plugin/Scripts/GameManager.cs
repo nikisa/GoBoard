@@ -18,7 +18,10 @@ public class GameManager : MonoBehaviour {
 
     EnemyMover m_enemyMover;
 
+    public Vector3 directionToMove;
+    Vector3 startPos;
 
+    Vector3 frontalDest;
 
     List<EnemyManager> m_enemies;
     List<EnemyMover> m_enemiesMovers;
@@ -61,6 +64,8 @@ public class GameManager : MonoBehaviour {
 
         MovableObject[] movableObjects = GameObject.FindObjectsOfType<MovableObject>() as MovableObject[];
         m_movableObjects = movableObjects.ToList();
+
+        directionToMove = new Vector3(0f, 0f, Board.spacing);
 
     }
 
@@ -189,7 +194,13 @@ public class GameManager : MonoBehaviour {
     }
 
     void PlayPlayerTurn() {
+        
+
         m_currentTurn = Turn.Player;
+
+        StartCoroutine(CheckSpottedPosition());
+
+
         m_player.IsTurnComplete = false;
         
     }
@@ -205,11 +216,13 @@ public class GameManager : MonoBehaviour {
                     enemy.PlayTurn();
                 }
                 else {
+                    
                     enemy.PushLeft();
                     enemy.PushRight();
                     enemy.PushUp();
                     enemy.PushDown();
                     enemy.PlayTurn();
+                    enemy.m_enemyMover.spottedDest = startPos + transform.TransformVector(directionToMove);
                 }
             }
         }
@@ -240,17 +253,15 @@ public class GameManager : MonoBehaviour {
 
     public void UpdateTurn() {
 
-        triggerNode();
+        
         checkNodeForObstacles();
         LightBulbNode();
         FearEnemies();
         FlashLightNode();
-
+        
 
         foreach (var enemy in m_enemies)
         {
-            
-            
             if (enemy!=null) {
                 if (m_board.FindMovableObjectsAt(m_board.FindNodeAt(enemy.transform.TransformVector(new Vector3(0, 0, 2f)) + enemy.transform.position)).Count != 0) {
                     enemy.SetMovementType(MovementType.Stationary);
@@ -259,10 +270,15 @@ public class GameManager : MonoBehaviour {
                     enemy.SetMovementType(enemy.GetFirstMovementType());
                 }
             }
-            
         }
 
         if (m_currentTurn == Turn.Player && m_player != null) {
+
+            foreach (var trap in m_board.AllTraps) {
+                trap.canShoot = true;
+            }
+
+            triggerNodePlayerTurn();
             if (m_player.IsTurnComplete && !AreEnemiesAllDead()) {
                 PlayEnemyTurn();
                 m_movableObjects = GetMovableObjects();
@@ -270,11 +286,11 @@ public class GameManager : MonoBehaviour {
         }
         
         else if (m_currentTurn == Turn.Enemy) {
+            
+            triggerNode();
             if (IsEnemyTurnComplete()) {
                 PlayPlayerTurn();
-
                 crackNode();
-
             }
         }
     }
@@ -335,8 +351,7 @@ public class GameManager : MonoBehaviour {
     }
    
 
-    public void triggerNode() {
-
+    public void triggerNodePlayerTurn() {
         if (m_board.playerNode.isATrigger) {
             m_board.SetPreviousPlayerNode(m_board.playerNode);
             m_board.playerNode.UpdateTriggerToTrue();
@@ -344,7 +359,10 @@ public class GameManager : MonoBehaviour {
         else if (m_board.GetPreviousPlayerNode() != null) {
             m_board.UpdateTriggerToFalse();
         }
+    }
 
+    public void triggerNode() {
+        
         List<EnemyManager> enemies;
         List<MovableObject> movableObjects;
 
@@ -357,6 +375,7 @@ public class GameManager : MonoBehaviour {
                 if (enemy.GetEnemySensor.FindEnemyNode().isATrigger) {
                     enemy.GetEnemySensor.SetPreviousEnemyNode(enemy.GetEnemySensor.FindEnemyNode());
                     enemy.GetEnemySensor.FindEnemyNode().UpdateTriggerToTrue();
+
                     //Debug.Log(enemy.GetEnemySensor.GetPreviousEnemyNode());
                 }
                 else if (enemy.GetEnemySensor.GetPreviousEnemyNode() != null) {
@@ -398,7 +417,7 @@ public class GameManager : MonoBehaviour {
             m_board.playerNode.transform.GetChild(2).gameObject.SetActive(false);
             m_player.transform.GetChild(2).gameObject.SetActive(true);
             m_player.hasLightBulb = true;
-            m_player.spottedPlayer = false;
+            //m_player.spottedPlayer = false;
         }
     }
 
@@ -413,14 +432,27 @@ public class GameManager : MonoBehaviour {
 
 
     public void FearEnemies(){
+        
         if (m_player.hasLightBulb) {
             foreach (var enemy in m_enemies) {
+
+                startPos = new Vector3(m_board.FindNodeAt(enemy.transform.position).Coordinate.x, 0f, m_board.FindNodeAt(enemy.transform.position).Coordinate.y);
+                
+                if (enemy.GetMovementType() == MovementType.Chaser) {
+                    Debug.Log(EnemyMover.index);
+                    frontalDest = m_player.GetPlayerPath(EnemyMover.index).transform.position;
+                }
+                else {
+                    frontalDest = startPos + enemy.transform.TransformVector(directionToMove);
+                }
+
+
                 if (enemy != null) {
-                    Node EnemyNode = m_board.FindNodeAt(enemy.transform.position);
-                    if (Vector3.Distance(EnemyNode.transform.position, m_board.playerNode.transform.position) < 2.5f) {
+                    if (frontalDest == m_board.playerNode.transform.position) {
                         enemy.isScared = true;
+                        enemy.wasScared = true;
                     }
-                    else if(Vector3.Distance(EnemyNode.transform.position, m_board.playerNode.transform.position) > 2.5f) {
+                    else if(frontalDest != m_board.playerNode.transform.position) {
                         enemy.isScared = false;
                     }
                 }
@@ -429,6 +461,25 @@ public class GameManager : MonoBehaviour {
         } 
     }
 
+    IEnumerator CheckSpottedPosition(){
+
+        yield return new WaitForSeconds(0.2f);
+
+        foreach (var enemy in m_enemies) {
+
+            Debug.Log(m_board.playerNode + "=" + m_board.FindNodeAt(enemy.m_enemyMover.spottedDest));
+
+            if (m_board.playerNode == m_board.FindNodeAt(enemy.m_enemyMover.spottedDest) && enemy.wasScared && m_board.FindNodeAt(enemy.m_enemyMover.firstDest).LinkedNodes.Contains(m_board.FindNodeAt(enemy.m_enemyMover.spottedDest))) {
+
+                Debug.Log("Spotted!");
+
+                m_board.ChasingPreviousPlayerNode = m_board.playerNode;
+                //m_player.spottedPlayer = true;
+                m_player.UpdatePlayerPath();
+
+            }
+        }
+    }
 
 
     public void checkNodeForObstacles() {

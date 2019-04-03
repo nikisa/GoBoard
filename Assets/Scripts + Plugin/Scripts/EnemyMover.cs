@@ -25,11 +25,20 @@ public class EnemyMover : Mover {
     
     public float standTime = 1f;
 
+    PlayerManager m_player;
+
+    [HideInInspector]public Vector3 firstDest;
+    [HideInInspector]public Vector3 spottedDest;
+
+   [HideInInspector] public static int index;
+
+    [HideInInspector] public bool firstChaserMove = false;
+
 	protected override void Awake() {
         base.Awake();
         faceDestination = true;
         movementType = firstMovementType;
-
+        m_player = Object.FindObjectOfType<PlayerManager>().GetComponent<PlayerManager>();
     }
 
     protected override void Start(){
@@ -63,32 +72,57 @@ public class EnemyMover : Mover {
 
         Vector3 startPos = new Vector3(m_currentNode.Coordinate.x, 0f, m_currentNode.Coordinate.y);
 
-        Vector3 firstDest = startPos + transform.TransformVector(directionToMove);
+        firstDest = startPos + transform.TransformVector(directionToMove);
 
-        Vector3 spottedDest = startPos + transform.TransformVector(directionToMove * 2f);
+        spottedDest = startPos + transform.TransformVector(directionToMove * 2f);
 
-        if (m_board.playerNode == m_board.FindNodeAt(spottedDest) && !m_player.spottedPlayer && m_player.hasLightBulb == false && m_board.FindNodeAt(firstDest).LinkedNodes.Contains(m_board.FindNodeAt(spottedDest))) {
+        if (m_board.playerNode == m_board.FindNodeAt(spottedDest) && !m_player.spottedPlayer && m_board.FindNodeAt(firstDest).LinkedNodes.Contains(m_board.FindNodeAt(spottedDest))) {
 
             Debug.Log("Spotted!");
             
             m_board.ChasingPreviousPlayerNode = m_board.playerNode; //Cambiare PreviousPlayerNode , qui o su Board
-            Move(firstDest , 0f);
+            //Move(firstDest , 0f);
             m_player.spottedPlayer = true;
+
+            m_player.UpdatePlayerPath();
 
         }
 
         else if (m_player.spottedPlayer) {
 
-            Debug.Log("Chasing...");
-            Debug.Log(spottedDest);
+            m_player.UpdatePlayerPath();
 
-            m_board.ChaserNewDest = m_board.ChasingPreviousPlayerNode;
-            m_board.ChasingPreviousPlayerNode = m_board.playerNode;
+            if (firstChaserMove == false) { // && CASELLA SUCCESSIVA NON è OCCUPATA (post armature)
+                Move(firstDest, 0f);
+                firstChaserMove = true;
+            }
+            else { // && CASELLA SUCCESSIVA NON è OCCUPATA (post armature)
+                Debug.Log("Chasing...");
 
-            Debug.Log(m_board.ChasingPreviousPlayerNode);
+                //m_board.ChaserNewDest = m_board.ChasingPreviousPlayerNode;
+                //m_board.ChasingPreviousPlayerNode = m_board.playerNode;
 
-            Move(m_board.ChaserNewDest.transform.position, 0f);
+                //Debug.Log(m_board.ChasingPreviousPlayerNode);
+
+                if (!m_player.hasLightBulb || m_player.transform.position != firstDest) {
+
+                    Debug.Log(m_player.GetPlayerPath(index));
+
+                    Move(m_player.GetPlayerPath(index).transform.position, 0f);
+
+                    yield return new WaitForSeconds(1f);
+
+                    destination = m_player.GetPlayerPath(index + 1).transform.position;
+                    FaceDestination();
+                    
+                    
+                }
+                
+                index++;
+            }
         }
+
+         
         
 
         while (isMoving) {

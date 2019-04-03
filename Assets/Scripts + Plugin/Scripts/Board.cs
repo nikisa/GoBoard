@@ -32,6 +32,12 @@ public class Board : MonoBehaviour {
     List<Mirror> m_AllMirrors = new List<Mirror>();
     public List<Mirror> AllMirrors { get { return m_AllMirrors; } }
 
+    List<Trap> m_AllTraps = new List<Trap>();
+    public List<Trap> AllTraps { get { return m_AllTraps; } }
+
+    List<PushingWall> m_AllPushingWalls = new List<PushingWall>();
+    public List<PushingWall> AllPushingWalls { get { return m_AllPushingWalls; } }
+
 
     Node m_playerNode;
 
@@ -74,6 +80,8 @@ public class Board : MonoBehaviour {
 
         m_AllMirrors = FindMirrors();
         m_AllmovableObjects = FindMovableObjects();
+        m_AllTraps = FindTraps();
+        m_AllPushingWalls = FindPushingWalls();
         
         GetNodeList();
         m_crackableNodes = FindCrackableNodes();
@@ -184,9 +192,23 @@ public class Board : MonoBehaviour {
         return foundMirrors;
     }
 
+    public List<Trap> FindTraps() {
+        List<Trap> foundTraps = new List<Trap>();
+        Trap[] traps = Object.FindObjectsOfType<Trap>() as Trap[];
+        foundTraps = traps.ToList();
 
+        return foundTraps;
+    }
 
+    public List<PushingWall> FindPushingWalls() {
+        List<PushingWall> foundPushingWalls = new List<PushingWall>();
+        PushingWall[] pushingWalls = Object.FindObjectsOfType<PushingWall>() as PushingWall[];
+        foundPushingWalls = pushingWalls.ToList();
 
+        return foundPushingWalls;
+    }
+
+    
     public void DrawGoal() {
         if (goalPrefab != null && m_goalNode != null) {
             GameObject goalInstance = Instantiate(goalPrefab, m_goalNode.transform.position, Quaternion.identity);

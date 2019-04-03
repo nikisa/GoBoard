@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,7 +13,7 @@ public class PlayerManager : TurnManager {
 
     public LayerMask obstacleLayer;
 
-    [HideInInspector] public bool spottedPlayer = false;
+    public bool spottedPlayer = false;
 
 
     public bool hasLightBulb = false;
@@ -21,7 +22,7 @@ public class PlayerManager : TurnManager {
     Board m_board;
     GameManager m_gm;
 
-
+    ArrayList playerPath;
     
     protected override void Awake() {
         base.Awake();
@@ -32,6 +33,7 @@ public class PlayerManager : TurnManager {
         m_board = Object.FindObjectOfType<Board>().GetComponent<Board>();
         m_gm = Object.FindObjectOfType<GameManager>().GetComponent<GameManager>();
 
+        playerPath = new ArrayList();
 
     }
 
@@ -281,10 +283,6 @@ public class PlayerManager : TurnManager {
                     }
                 }
             }
-            
-
-
-
 
         }   
     }
@@ -306,9 +304,31 @@ public class PlayerManager : TurnManager {
         }
     }
 
+
+    public void UpdatePlayerPath() {
+        playerPath.Add(m_board.playerNode);
+        
+    }
+
+    public Node GetPlayerPath(int i) {
+        Node playerNode = (Node)playerPath[i];
+        return playerNode;
+    }
+    
+    public void clearPlayerPath() {
+        //playerPath.Clear();
+        EnemyMover.index++;
+
+    }
+
+
     public override void FinishTurn() {
         CaptureEnemies();
         base.FinishTurn();
+    }
+
+    public void PlayerDead() {
+        m_gm.LoseLevel();
     }
     
 

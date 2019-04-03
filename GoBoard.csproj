@@ -287,6 +287,7 @@
     <Compile Include="Assets\ProCore\ProGrids\Classes\pg_SceneMeshRender.cs" />
     <Compile Include="Assets\ProCore\ProGrids\Classes\pg_Util.cs" />
     <Compile Include="Assets\ProCore\ProGrids\MonoBehaviour\pg_IgnoreSnap.cs" />
+    <Compile Include="Assets\PushingWall.cs" />
     <Compile Include="Assets\Scripts + Plugin\Scripts\Board.cs" />
     <Compile Include="Assets\Scripts + Plugin\Scripts\EndScreen.cs" />
     <Compile Include="Assets\Scripts + Plugin\Scripts\EnemyDeath.cs" />
@@ -310,12 +311,14 @@
     <Compile Include="Assets\Scripts + Plugin\Scripts\PlayerInput.cs" />
     <Compile Include="Assets\Scripts + Plugin\Scripts\PlayerManager.cs" />
     <Compile Include="Assets\Scripts + Plugin\Scripts\PlayerMover.cs" />
+    <Compile Include="Assets\Scripts + Plugin\Scripts\Projectile.cs" />
     <Compile Include="Assets\Scripts + Plugin\Scripts\Sample\MoveSample.cs" />
     <Compile Include="Assets\Scripts + Plugin\Scripts\Sample\RotateSample.cs" />
     <Compile Include="Assets\Scripts + Plugin\Scripts\Sample\SampleInfo.cs" />
     <Compile Include="Assets\Scripts + Plugin\Scripts\ScreenFader.cs" />
     <Compile Include="Assets\Scripts + Plugin\Scripts\Spinner.cs" />
     <Compile Include="Assets\Scripts + Plugin\Scripts\StaticCounter.cs" />
+    <Compile Include="Assets\Scripts + Plugin\Scripts\Trap.cs" />
     <Compile Include="Assets\Scripts + Plugin\Scripts\TurnManager.cs" />
     <Compile Include="Assets\Scripts + Plugin\Scripts\Utility.cs" />
   </ItemGroup>

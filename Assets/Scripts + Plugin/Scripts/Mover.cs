@@ -62,6 +62,25 @@ public class Mover : MonoBehaviour {
         }
     }
 
+    public void Jump(Vector3 destinationPos, float delayTime = 0.25f) {
+
+        //if (isMoving) {
+        //    return;
+        //}
+        if (m_board != null) {
+            Node targetNode = m_board.FindNodeAt(destinationPos);
+            if (targetNode != null) {
+                    StartCoroutine(MoveRoutine(destinationPos, delayTime));
+            }
+            else {
+                Debug.Log("DEAD");
+                StartCoroutine(MoveRoutine(destinationPos, delayTime));
+            }
+        }
+    }
+
+
+
     protected virtual IEnumerator MoveRoutine(Vector3 destinationPos, float delayTime) {
 
         isMoving = true;
@@ -122,14 +141,14 @@ public class Mover : MonoBehaviour {
         m_currentNode = m_board.FindNodeAt(transform.position);
     }
 
-    protected void FaceDestination() {
+    public void FaceDestination() {
         Vector3 relativePosition = destination - transform.position;
         Quaternion newRotation = Quaternion.LookRotation(relativePosition, Vector3.up);
         float newY = newRotation.eulerAngles.y;
 
         iTween.RotateTo(gameObject, iTween.Hash(
             "y", newY,
-            "delay", 0f,
+            "delay", 0.3f,
             "easetype", easeType,
             "time", rotateTime
             ));

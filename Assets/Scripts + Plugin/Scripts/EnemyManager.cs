@@ -8,7 +8,7 @@ using UnityEngine.Events;
 
 public class EnemyManager : TurnManager {
 
-    EnemyMover m_enemyMover;
+    public EnemyMover m_enemyMover;
 
     EnemySensor m_enemySensor;
     public EnemySensor GetEnemySensor { get { return m_enemySensor; } }
@@ -22,6 +22,7 @@ public class EnemyManager : TurnManager {
 
     bool m_isDead = false;
     public bool isScared = false;
+    public bool wasScared = false;
 
     public bool isDead { get { return m_isDead; } }
 
@@ -105,9 +106,14 @@ public class EnemyManager : TurnManager {
             
             Node EnemyNode = m_board.FindNodeAt(transform.position);
 
-            if (m_board.playerNode.transform.position.z == EnemyNode.transform.position.z && Vector3.Distance(EnemyNode.transform.position, m_board.playerNode.transform.position) <= 2f && m_board.playerNode.transform.position.x > EnemyNode.transform.position.x) {
+            if (m_board.playerNode.transform.position.z == EnemyNode.transform.position.z && Vector3.Distance(EnemyNode.transform.position, m_board.playerNode.transform.position) < 3f && m_board.playerNode.transform.position.x > EnemyNode.transform.position.x) {
                 Debug.Log("MoveLeft");
                 m_enemyMover.MoveLeft();
+
+                m_enemyMover.destination = m_player.transform.position;
+                m_enemyMover.FaceDestination();
+                m_player.clearPlayerPath();
+                m_enemyMover.firstChaserMove = false;
             }
         }
     }
@@ -120,6 +126,11 @@ public class EnemyManager : TurnManager {
             if (m_board.playerNode.transform.position.z == EnemyNode.transform.position.z && Vector3.Distance(EnemyNode.transform.position, m_board.playerNode.transform.position) < 3f && m_board.playerNode.transform.position.x < EnemyNode.transform.position.x) {
                 Debug.Log("MoveRight");
                 m_enemyMover.MoveRight();
+
+                m_enemyMover.destination = m_player.transform.position;
+                m_enemyMover.FaceDestination();
+                m_player.clearPlayerPath();
+                m_enemyMover.firstChaserMove = false;
             }
         }
     }
@@ -134,6 +145,11 @@ public class EnemyManager : TurnManager {
             if (m_board.playerNode.transform.position.x == EnemyNode.transform.position.x && Vector3.Distance(EnemyNode.transform.position, m_board.playerNode.transform.position) < 3f && m_board.playerNode.transform.position.z < EnemyNode.transform.position.z) {
                 Debug.Log("MoveUp");
                 m_enemyMover.MoveForward();
+
+                m_enemyMover.destination = m_player.transform.position;
+                m_enemyMover.FaceDestination();
+                m_player.clearPlayerPath();
+                m_enemyMover.firstChaserMove = false;
             }
         }
     }
@@ -149,6 +165,12 @@ public class EnemyManager : TurnManager {
             if (m_board.playerNode.transform.position.x == EnemyNode.transform.position.x && Vector3.Distance(EnemyNode.transform.position, m_board.playerNode.transform.position) < 3f && m_board.playerNode.transform.position.z > EnemyNode.transform.position.z) {
                 Debug.Log("MoveDown");
                 m_enemyMover.MoveBackward();
+
+                m_enemyMover.destination = m_player.transform.position;
+                m_enemyMover.FaceDestination();
+                m_player.clearPlayerPath();
+                m_enemyMover.firstChaserMove = false;
+
             }
         }
     }
