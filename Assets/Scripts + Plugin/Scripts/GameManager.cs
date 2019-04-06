@@ -65,7 +65,7 @@ public class GameManager : MonoBehaviour {
         MovableObject[] movableObjects = GameObject.FindObjectsOfType<MovableObject>() as MovableObject[];
         m_movableObjects = movableObjects.ToList();
 
-        directionToMove = new Vector3(0f, 0f, Board.spacing);
+        //directionToMove = new Vector3(0f, 0f, Board.spacing);
 
     }
 
@@ -301,10 +301,12 @@ public class GameManager : MonoBehaviour {
 
         List<EnemyManager> enemies;
         List<MovableObject> movableObjects;
+        List<Sword> swords;
 
         foreach (var node in m_board.CrackableNodes) {
             enemies = m_board.FindEnemiesAt(node);
             movableObjects = m_board.FindMovableObjectsAt(node);
+            swords = m_board.FindSwordsAt(node);
             foreach (EnemyManager enemy in enemies) {
                 node.UpdateCrackableState();
                 node.UpdateCrackableTexture();
@@ -335,10 +337,22 @@ public class GameManager : MonoBehaviour {
                 }
             }
             //______M.O. ON CRACKNODE___________________
+
+            //______Swords ON CRACKNODE
+
+            foreach (Sword sword in swords) {
+                node.DestroyCrackableInOneHit();
+                node.UpdateCrackableTexture();
+            }
+                
+            
+            //______Swords ON CRACKNODE___________________
+
+
         }
 
         //______ENEMY ON CRACKNODE___________________
-        
+
 
         if (m_board.playerNode.isCrackable) {
             m_board.playerNode.UpdateCrackableState();

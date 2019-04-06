@@ -71,6 +71,8 @@ public class Node : MonoBehaviour {
 
     public int pushingWallID = 0;
 
+    public int armorID = 0;
+
     private Vector3 m_nodePosition;
 
     public Sprite[] sprites;
@@ -201,6 +203,10 @@ public class Node : MonoBehaviour {
         this.crackableState--;
     }
 
+    public void DestroyCrackableInOneHit() {
+        this.crackableState = 0;
+    }
+
     public void FromCrackableToNormal() {
         this.crackableState = 100;
     }
@@ -219,6 +225,8 @@ public class Node : MonoBehaviour {
         UpdateGateToOpen(gateID);
         TrapActivation(trapID);
         PushingWallActivation(pushingWallID);
+        ArmorActivation(armorID);
+        
         return triggerState = true;
 
     }//UpdateTriggerToFalse --> in Board
@@ -230,6 +238,7 @@ public class Node : MonoBehaviour {
 
     public bool UpdateSwitchToTrue() {
         UpdateGateToOpen(gateID);
+        ArmorActivation(armorID);
 
         PushingWallActivation(pushingWallID);
 
@@ -245,6 +254,7 @@ public class Node : MonoBehaviour {
 
     public bool UpdateSwitchToFalse() {
         UpdateGateToClose(gateID);
+        ArmorDeactivation(armorID);
 
         if (mirrorID != 0) {
             foreach (var mirror in m_board.AllMirrors) {
@@ -263,6 +273,10 @@ public class Node : MonoBehaviour {
 
     public int GetGateID() {
         return gateID;
+    }
+
+    public int GetArmorID() {
+        return armorID;
     }
 
     public int GetMirrorID() {
@@ -308,6 +322,22 @@ public class Node : MonoBehaviour {
         foreach (var pushingWall in m_board.AllPushingWalls) {
             if (pushingWall.GetID() == id) {
                 pushingWall.Push();
+            }
+        }
+    }
+
+    public void ArmorActivation(int id) {
+        foreach (var armor in m_board.AllArmors) {
+            if (armor.GetID() == id) {
+                armor.ActivateSword();
+            }
+        }
+    }
+
+    public void ArmorDeactivation(int id) {
+        foreach (var armor in m_board.AllArmors) {
+            if (armor.GetID() == id) {
+                armor.DeactivateSword();
             }
         }
     }
